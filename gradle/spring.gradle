@@ -1,0 +1,23 @@
+dependencies {
+    // WEB
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Development tools (for local development only)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Spring Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    testImplementation 'org.springframework.batch:spring-batch-test'
+
+    // Thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Validation (for request/response validation)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // WebSocket (for real-time communication)
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // feign client
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
