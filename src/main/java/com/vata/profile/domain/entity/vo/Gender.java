@@ -11,7 +11,7 @@ public enum Gender {
         this.promptKeyword = promptKeyword;
     }
 
-    public String getPromptKeyword() {
+    public String getPrompt() {
         return "gender is" + promptKeyword;
     }
 }

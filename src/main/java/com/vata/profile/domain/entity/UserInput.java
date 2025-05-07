@@ -3,6 +3,7 @@ package com.vata.profile.domain.entity;
 import com.vata.profile.domain.entity.vo.CharacterType;
 import com.vata.profile.domain.entity.vo.Gender;
 import com.vata.profile.domain.entity.vo.Mbti;
+import com.vata.profile.domain.entity.vo.StyleType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

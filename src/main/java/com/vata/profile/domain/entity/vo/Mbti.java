@@ -1,8 +1,5 @@
 package com.vata.profile.domain.entity.vo;
 
-import lombok.Getter;
-
-@Getter
 public enum Mbti {
     ISTJ("practical and responsible personality"),
     ISFJ("warmhearted and dependable personality"),
@@ -25,5 +22,9 @@ public enum Mbti {
 
     Mbti(String description) {
         this.description = description;
+    }
+
+    public String getPrompt(){
+        return "personality is" + description;
     }
 }
