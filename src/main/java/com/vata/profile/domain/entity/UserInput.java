@@ -1,5 +1,6 @@
 package com.vata.profile.domain.entity;
 
+import com.vata.profile.domain.entity.vo.Mbti;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public class UserInput {
 
     private final Gender gender;
-    private final MBTI mbti;
+    private final Mbti mbti;
     private final String hobby;
     private final CharacterType characterType;
     private final StyleType styleType;
