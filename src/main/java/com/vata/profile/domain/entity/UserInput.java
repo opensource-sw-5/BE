@@ -1,5 +1,6 @@
 package com.vata.profile.domain.entity;
 
+import com.vata.profile.domain.entity.vo.Gender;
 import com.vata.profile.domain.entity.vo.Mbti;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
