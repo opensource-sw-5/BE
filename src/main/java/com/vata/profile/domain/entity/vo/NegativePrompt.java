@@ -1,5 +1,7 @@
 package com.vata.profile.domain.entity.vo;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import lombok.Getter;
 
 @Getter
@@ -17,5 +19,11 @@ public enum NegativePrompt {
 
     NegativePrompt(String keyword) {
         this.keyword = keyword;
+    }
+
+    public static String getNegativePrompt() {
+        return Arrays.stream(NegativePrompt.values())
+                .map(NegativePrompt::getKeyword)
+                .collect(Collectors.joining(", "));
     }
 }
