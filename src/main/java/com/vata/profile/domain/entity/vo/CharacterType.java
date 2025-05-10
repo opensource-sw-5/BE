@@ -12,6 +12,6 @@ public enum CharacterType {
     }
 
     public String getPrompt() {
-        return "character type is" + promptWord;
+        return "character type is " + promptWord;
     }
 }
