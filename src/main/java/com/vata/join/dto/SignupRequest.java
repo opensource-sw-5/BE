@@ -1,3 +1,10 @@
+/*
+데이터 전송 (Data Transfer Object - DTO)
+    1. 클라이언트가 입력한 회원가입에 필요한 정보 (아이디, 비밀번호, 닉네임, 이메일 등)를 담아서
+    서버 측 컨트롤러 (RegistrationController)에 전달하는 역할
+    2. 클라이언트가 전송한 요청 데이터를 편리하게 객체 형태로 받을 수 있도록 해줌 (signup 입장)
+    3. 데이터 유효성 검사
+ */
 package com.vata.join.dto;
 
 import jakarta.validation.constraints.Email;
@@ -9,7 +16,7 @@ import lombok.Data;
 // 해당 클래스의 필드에 대한 Getter, Setter, toString(), equals(), hashCode(), RequiredArgsConstructor를 자동으로 생성
 public class SignupRequest {
 
-    // NotBlanck : 해당 필드가 비어있거나 공백만으로 이루어질 수 없음 -> 유효성 검사
+    // NotBlank : 해당 필드가 비어있거나 공백만으로 이루어질 수 없음 -> 유효성 검사
     @NotBlank(message = "아이디를 입력해주세요.")
     private String username;
 
