@@ -9,6 +9,7 @@ RegistrationController
 package com.vata.join.controller;
 
 import com.vata.join.service.RegistrationService;
+import com.vata.join.dto.SignupRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
