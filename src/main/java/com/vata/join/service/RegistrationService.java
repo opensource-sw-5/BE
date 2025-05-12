@@ -7,6 +7,7 @@
 package com.vata.join.service;
 
 import com.vata.join.domain.User;
+import com.vata.join.dto.SignupRequest;
 import com.vata.join.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class RegistrationService {
         if (userRepository.findByUsername(signupRequest.getUsername()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
-        if (userRepository.findByNickname(signupRequest.getUNickname()).isPresent()) {
+        if (userRepository.findByNickname(signupRequest.getNickname()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
         if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
