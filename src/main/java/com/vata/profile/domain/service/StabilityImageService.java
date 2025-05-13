@@ -1,5 +1,6 @@
 package com.vata.profile.domain.service;
 
+import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.domain.entity.vo.NegativePrompt;
 import com.vata.profile.domain.entity.vo.StyleType;
 import com.vata.profile.infrastructure.StabilityImageFeignClient;
@@ -21,8 +22,9 @@ public class StabilityImageService {
     private static final String ACCEPT_HEADER_VALUE = "image/*";
     private static final String OUTPUT_FORMAT = "jpeg";
     private static final String DUMMY_FILENAME = "none";
+    private static final String CONTENT_TYPE = "image/jpeg";
 
-    public byte[] generateImage(Long userId, String prompt, StyleType styleType) {
+    public ImageGenerateResponse generateImage(Long userId, String prompt, StyleType styleType) {
         // String apiKey = userRepository.findApiKeyByUserId(userId)
         //        .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
         String apiKey = "";
@@ -45,7 +47,7 @@ public class StabilityImageService {
             );
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return response.getBody();
+                return new ImageGenerateResponse(response.getBody(), CONTENT_TYPE);
             } else {
                 log.error("Stability API 호출 실패 - 상태코드: {}, 사용자: {}", response.getStatusCode(), userId);
                 throw new RuntimeException("Stability API 응답 오류: " + response.getStatusCode());

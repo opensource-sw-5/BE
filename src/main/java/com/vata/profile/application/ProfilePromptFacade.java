@@ -12,10 +12,9 @@ import org.springframework.stereotype.Service;
 public class ProfilePromptFacade {
     private final StabilityImageService stabilityImageService;
 
-    public ImageGenerateResponse generateProfileImage(UserInputRequest request){
+    public ImageGenerateResponse generateProfileImage(UserInputRequest request) {
         String prompt = generatePrompt(request);
-        byte[] generatedImage = stabilityImageService.generateImage(1L, prompt, request.styleType()); // TODO: userId 변경
-        return new ImageGenerateResponse(generatedImage);
+        return stabilityImageService.generateImage(1L, prompt, request.styleType()); // TODO: userId 변경
     }
 
     private String generatePrompt(UserInputRequest request) {

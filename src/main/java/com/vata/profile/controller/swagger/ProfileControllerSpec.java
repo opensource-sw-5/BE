@@ -8,21 +8,21 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "Profile Prompt API", description = "AI 프로필 프롬프트 생성 API")
+@Tag(name = "Profile Prompt API", description = "AI 프로필 생성 API")
 public interface ProfileControllerSpec {
 
     @Operation(
-            summary = "프로필 프롬프트 생성",
-            description = "사용자 입력을 기반으로 AI 프롬프트를 생성합니다.",
+            summary = "프로필 생성",
+            description = "사용자 입력을 기반으로 AI 프로필을 생성합니다.",
             requestBody = @RequestBody(
                     required = true,
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(name = "프로필 프롬프트 생성 요청", value = GENERATE_PROFILE_PROMPT_REQUEST)
+                            examples = @ExampleObject(name = "프로필 생성 요청", value = GENERATE_PROFILE_PROMPT_REQUEST)
                     )
             )
     )
-    ResponseEntity<String> generatePrompt(UserInputRequest request);
+    ResponseEntity<byte[]> generateImage(UserInputRequest request);
 
     String GENERATE_PROFILE_PROMPT_REQUEST = """
             {
