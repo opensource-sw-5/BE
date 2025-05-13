@@ -1,7 +1,7 @@
 package com.vata.profile.infrastructure;
 
 import com.vata.common.configuration.FeignConfig;
-import jakarta.annotation.Resource;
+import org.springframework.core.io.Resource;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
