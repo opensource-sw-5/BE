@@ -22,9 +22,9 @@ public class StabilityImageService {
     private static final String OUTPUT_FORMAT = "jpeg";
     private static final String DUMMY_FILENAME = "none";
 
-    public byte[] generateImage(String userId, String prompt, StyleType styleType) {
-//        String apiKey = userRepository.findApiKeyByUserId(userId)
-//                .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
+    public byte[] generateImage(Long userId, String prompt, StyleType styleType) {
+        // String apiKey = userRepository.findApiKeyByUserId(userId)
+        //        .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
         String apiKey = "";
 
         try {
