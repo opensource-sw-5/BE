@@ -28,6 +28,7 @@ public interface StabilityImageFeignClient {
             @RequestPart("prompt") String prompt,
             @RequestPart(value = "negative_prompt", required = false) String negativePrompt,
             @RequestPart(value = "seed", required = false) Long seed,
+            @RequestPart(value = "style_preset", required = false) String stylePreset,
             @RequestPart("output_format") String outputFormat
     );
 }

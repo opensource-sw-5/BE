@@ -1,6 +1,7 @@
 package com.vata.profile.domain.service;
 
 import com.vata.profile.domain.entity.vo.NegativePrompt;
+import com.vata.profile.domain.entity.vo.StyleType;
 import com.vata.profile.infrastructure.StabilityImageFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ public class StabilityImageService {
 
     private final StabilityImageFeignClient stabilityImageFeignClient;
 
-    public byte[] generateImage(String userId, String prompt) {
+    public byte[] generateImage(String userId, String prompt, StyleType styleType) {
 //        String apiKey = userRepository.findApiKeyByUserId(userId)
 //                .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
         String apiKey = "sdfsdf";
@@ -25,6 +26,7 @@ public class StabilityImageService {
             Resource dummyFile = createDummyFile();
             String negativePrompt = NegativePrompt.getNegativePrompt();
             long seed = generateRandomSeed();
+            String stylePreset = styleType.getStylePreset();
 
             ResponseEntity<byte[]> response = stabilityImageFeignClient.generateImage(
                     "Bearer " + apiKey,
@@ -33,6 +35,7 @@ public class StabilityImageService {
                     prompt,
                     negativePrompt,
                     seed,
+                    stylePreset,
                     "jpg"
             );
 
