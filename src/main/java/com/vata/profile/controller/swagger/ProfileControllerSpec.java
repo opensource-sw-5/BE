@@ -30,7 +30,7 @@ public interface ProfileControllerSpec {
               "mbti": "INFP",
               "hobby": "reading",
               "characterType": "CHARACTER",
-              "styleType": "ILLUSTRATION",
+              "styleType": "ANALOG_FILM",
               "etc": "Make the background feel like a warm and cozy library."
             }
             """;
