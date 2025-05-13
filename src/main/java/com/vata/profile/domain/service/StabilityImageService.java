@@ -1,5 +1,6 @@
 package com.vata.profile.domain.service;
 
+import com.vata.profile.domain.entity.vo.NegativePrompt;
 import com.vata.profile.infrastructure.StabilityImageFeignClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +23,16 @@ public class StabilityImageService {
 
         try {
             Resource dummyFile = createDummyFile();
+            String negativePrompt = NegativePrompt.getNegativePrompt();
+            long seed = generateRandomSeed();
 
             ResponseEntity<byte[]> response = stabilityImageFeignClient.generateImage(
                     "Bearer " + apiKey,
                     "image/*",
                     dummyFile,
                     prompt,
+                    negativePrompt,
+                    seed,
                     "jpg"
             );
 
@@ -41,6 +46,10 @@ public class StabilityImageService {
             log.error("Stability 이미지 생성 중 예외 발생 - 사용자: {}, 메시지: {}", userId, e.getMessage(), e);
             throw new RuntimeException("이미지 생성 중 오류가 발생했습니다", e);
         }
+    }
+
+    private long generateRandomSeed() {
+        return (long) (Math.random() * Long.MAX_VALUE);
     }
 
     private Resource createDummyFile() {
