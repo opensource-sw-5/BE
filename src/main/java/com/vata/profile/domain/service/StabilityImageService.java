@@ -17,10 +17,15 @@ public class StabilityImageService {
 
     private final StabilityImageFeignClient stabilityImageFeignClient;
 
+    private static final String AUTH_HEADER_PREFIX = "Bearer ";
+    private static final String ACCEPT_HEADER_VALUE = "image/*";
+    private static final String OUTPUT_FORMAT = "jpeg";
+    private static final String DUMMY_FILENAME = "none";
+
     public byte[] generateImage(String userId, String prompt, StyleType styleType) {
 //        String apiKey = userRepository.findApiKeyByUserId(userId)
 //                .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
-        String apiKey = "sdfsdf";
+        String apiKey = "";
 
         try {
             Resource dummyFile = createDummyFile();
@@ -29,14 +34,14 @@ public class StabilityImageService {
             String stylePreset = styleType.getStylePreset();
 
             ResponseEntity<byte[]> response = stabilityImageFeignClient.generateImage(
-                    "Bearer " + apiKey,
-                    "image/*",
+                    AUTH_HEADER_PREFIX + apiKey,
+                    ACCEPT_HEADER_VALUE,
                     dummyFile,
                     prompt,
                     negativePrompt,
                     seed,
                     stylePreset,
-                    "jpg"
+                    OUTPUT_FORMAT
             );
 
             if (response.getStatusCode().is2xxSuccessful()) {
@@ -59,7 +64,7 @@ public class StabilityImageService {
         return new ByteArrayResource("".getBytes()) {
             @Override
             public String getFilename() {
-                return "none";
+                return DUMMY_FILENAME;
             }
         };
     }
