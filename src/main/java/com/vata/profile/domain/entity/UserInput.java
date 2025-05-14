@@ -42,7 +42,7 @@ public class UserInput {
         prompt.append(characterType.getPrompt()).append(", ");
 
         if (etc != null && !etc.isBlank()) {
-            prompt.append(", etc: ").append(etc);
+            prompt.append("etc: ").append(etc);
         }
 
         prompt.append(". Please create a unique and expressive profile image that captures these characteristics.");
