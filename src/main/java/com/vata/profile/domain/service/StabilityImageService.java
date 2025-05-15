@@ -3,71 +3,41 @@ package com.vata.profile.domain.service;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.domain.entity.vo.NegativePrompt;
 import com.vata.profile.domain.entity.vo.StyleType;
-import com.vata.profile.infrastructure.StabilityImageFeignClient;
+import com.vata.profile.infrastructure.StabilityRestClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class StabilityImageService {
-
-    private final StabilityImageFeignClient stabilityImageFeignClient;
-
-    private static final String AUTH_HEADER_PREFIX = "Bearer ";
-    private static final String ACCEPT_HEADER_VALUE = "image/*";
-    private static final String OUTPUT_FORMAT = "jpeg";
-    private static final String DUMMY_FILENAME = "none";
+    private static final long MAX_SEED = 4294967294L;
     private static final String CONTENT_TYPE = "image/jpeg";
+
+    private final StabilityRestClient stabilityRestClient;
+
 
     public ImageGenerateResponse generateImage(Long userId, String prompt, StyleType styleType) {
         // String apiKey = userRepository.findApiKeyByUserId(userId)
         //        .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
         String apiKey = "";
+        long seed = generateSeed();
 
-        try {
-            Resource dummyFile = createDummyFile();
-            String negativePrompt = NegativePrompt.getNegativePrompt();
-            long seed = generateRandomSeed();
-            String stylePreset = styleType.getStylePreset();
+        ResponseEntity<byte[]> response = stabilityRestClient.generateImage(
+                apiKey,
+                prompt,
+                NegativePrompt.getNegativePrompt(),
+                seed,
+                styleType.getStylePreset()
+        );
 
-            ResponseEntity<byte[]> response = stabilityImageFeignClient.generateImage(
-                    AUTH_HEADER_PREFIX + apiKey,
-                    ACCEPT_HEADER_VALUE,
-                    dummyFile,
-                    prompt,
-                    negativePrompt,
-                    seed,
-                    stylePreset,
-                    OUTPUT_FORMAT
-            );
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return new ImageGenerateResponse(response.getBody(), CONTENT_TYPE);
-            } else {
-                log.error("Stability API 호출 실패 - 상태코드: {}, 사용자: {}", response.getStatusCode(), userId);
-                throw new RuntimeException("Stability API 응답 오류: " + response.getStatusCode());
-            }
-        } catch (Exception e) {
-            log.error("Stability 이미지 생성 중 예외 발생 - 사용자: {}, 메시지: {}", userId, e.getMessage(), e);
-            throw new RuntimeException("이미지 생성 중 오류가 발생했습니다", e);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return new ImageGenerateResponse(response.getBody(), CONTENT_TYPE);
         }
+        throw new RuntimeException("API 오류");
     }
 
-    private long generateRandomSeed() {
-        return (long) (Math.random() * Long.MAX_VALUE);
-    }
-
-    private Resource createDummyFile() {
-        return new ByteArrayResource("".getBytes()) {
-            @Override
-            public String getFilename() {
-                return DUMMY_FILENAME;
-            }
-        };
+    private long generateSeed() {
+        return (long) (Math.random() * MAX_SEED);
     }
 }

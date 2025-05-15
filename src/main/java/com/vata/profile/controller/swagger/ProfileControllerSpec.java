@@ -28,9 +28,9 @@ public interface ProfileControllerSpec {
             {
               "gender": "FEMALE",
               "mbti": "INFP",
-              "hobby": "reading",
+              "hobby": "reading a book",
               "characterType": "CHARACTER",
-              "styleType": "ANALOG_FILM",
+              "styleType": "MODEL_3D",
               "etc": "Make the background feel like a warm and cozy library."
             }
             """;
