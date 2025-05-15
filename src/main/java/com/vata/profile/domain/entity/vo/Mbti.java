@@ -25,6 +25,6 @@ public enum Mbti {
     }
 
     public String getPrompt(){
-        return "personality is" + description;
+        return "personality is " + description;
     }
 }

@@ -12,6 +12,6 @@ public enum StyleType {
     }
 
     public String getPrompt() {
-        return "styleType is" + stylePrompt;
+        return "styleType is " + stylePrompt;
     }
 }
