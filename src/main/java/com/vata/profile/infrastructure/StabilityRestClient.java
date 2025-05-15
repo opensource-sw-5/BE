@@ -1,6 +1,7 @@
 package com.vata.profile.infrastructure;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,7 +18,11 @@ public class StabilityRestClient {
 
     private final RestTemplate restTemplate;
 
-    private static final String STABILITY_API_URL = "https://api.stability.ai/v2beta/stable-image/generate/core";
+    @Value("${stability.api.base-url}")
+    private String baseUrl;
+
+    @Value("${stability.api.image-generate-path}")
+    private String imageGeneratePath;
     private static final String AUTH_HEADER_PREFIX = "Bearer ";
     private static final String ACCEPT_HEADER_VALUE = "image/*";
     private static final String OUTPUT_FORMAT = "jpeg";
@@ -35,7 +40,9 @@ public class StabilityRestClient {
         body.add("style_preset", stylePreset);
         body.add("output_format", OUTPUT_FORMAT);
 
+        String apiUrl = baseUrl + imageGeneratePath;
+
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
-        return restTemplate.exchange(STABILITY_API_URL, HttpMethod.POST, entity, byte[].class);
+        return restTemplate.exchange(apiUrl, HttpMethod.POST, entity, byte[].class);
     }
 }

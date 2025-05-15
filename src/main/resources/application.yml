@@ -11,3 +11,4 @@ spring:
 stability:
   api:
     base-url: https://api.stability.ai
+    image-generate-path: /v2beta/stable-image/generate/core
