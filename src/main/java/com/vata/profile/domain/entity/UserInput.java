@@ -40,10 +40,9 @@ public class UserInput {
         prompt.append(mbti.getPrompt()).append(", ");
         prompt.append("hobby is ").append(hobby).append(", ");
         prompt.append(characterType.getPrompt()).append(", ");
-        prompt.append("style is ").append(styleType.getPrompt());
 
         if (etc != null && !etc.isBlank()) {
-            prompt.append(", etc: ").append(etc);
+            prompt.append("etc: ").append(etc);
         }
 
         prompt.append(". Please create a unique and expressive profile image that captures these characteristics.");
