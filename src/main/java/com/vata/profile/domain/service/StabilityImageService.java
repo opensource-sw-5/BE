@@ -1,9 +1,11 @@
 package com.vata.profile.domain.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.domain.entity.vo.NegativePrompt;
 import com.vata.profile.domain.entity.vo.StyleType;
 import com.vata.profile.infrastructure.StabilityRestClient;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,8 +35,22 @@ public class StabilityImageService {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             return new ImageGenerateResponse(response.getBody(), CONTENT_TYPE);
+        }else{
+            String errorMessage = "알 수 없는 오류";
+
+            try {
+                byte[] body = response.getBody();
+                if (body != null && body.length > 0) {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Map<String, Object> errorMap = mapper.readValue(body, Map.class);
+                    errorMessage = (String) errorMap.getOrDefault("message", errorMessage);
+                }
+            } catch (Exception e) {
+                errorMessage = "에러 메시지 파싱 실패";
+            }
+
+            throw new IllegalStateException("이미지 생성 실패: " + errorMessage + " (status=" + response.getStatusCode() + ")");
         }
-        throw new RuntimeException("API 오류");
     }
 
     private long generateSeed() {
