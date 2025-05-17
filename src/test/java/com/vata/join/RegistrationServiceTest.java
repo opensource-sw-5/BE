@@ -3,7 +3,7 @@ package com.vata.join;
 import com.vata.join.domain.User;
 import com.vata.join.dto.SignupRequest;
 import com.vata.join.repository.UserRepository;
-import com.vata.join.service.RegistrationService;
+import com.vata.join.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +26,7 @@ public class RegistrationServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private RegistrationService registrationService;
+    private AuthService registrationService;
 
     @Test
     void signup_성공() {

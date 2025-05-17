@@ -9,13 +9,12 @@ package com.vata.join.service;
 import com.vata.join.domain.User;
 import com.vata.join.dto.SignupRequest;
 import com.vata.join.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service    // 스프링의 서비스 컴포넌트로 등록
-public class RegistrationService {
+public class AuthService {
 
     @Autowired
     private UserRepository userRepository;

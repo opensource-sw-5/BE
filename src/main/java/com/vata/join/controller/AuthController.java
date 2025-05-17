@@ -8,11 +8,10 @@ RegistrationController
  */
 package com.vata.join.controller;
 
-import com.vata.join.service.RegistrationService;
+import com.vata.join.service.AuthService;
 import com.vata.join.dto.SignupRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; // http 응답을 나타내는 객체 (상태 코드 + 메시지)
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final RegistrationService registrationService;
+    private final AuthService registrationService;
 
     @PostMapping("/signup") // /signup 경로로 들어오는 POST 요청을 처리하는 메서드 정의
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRequest) {
