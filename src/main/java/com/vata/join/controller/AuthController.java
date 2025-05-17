@@ -11,7 +11,6 @@ package com.vata.join.controller;
 import com.vata.join.service.RegistrationService;
 import com.vata.join.dto.SignupRequest;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; // http 응답을 나타내는 객체 (상태 코드 + 메시지)
@@ -21,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController // RESTful API의 컨트롤러 (@Controller와 @ResponseBody를 포함)
-@RequestMapping("/service") // 해당 컨트롤러의 모든 API 엔드포인트의 기본 URL -> /service로 설정
-public class RegistrationController {
+@RequestMapping("/api/auth") // 해당 컨트롤러의 모든 API 엔드포인트의 기본 URL -> /api/auth로 설정
+public class AuthController {
 
     private final RegistrationService registrationService;
 
     @Autowired
-    public RegistrationController(RegistrationService registrationService) {
+    public AuthController(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
 
