@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service    // 스프링의 서비스 컴포넌트로 등록
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
         // 중복 검사
         if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
