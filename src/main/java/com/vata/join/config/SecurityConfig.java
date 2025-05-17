@@ -15,7 +15,6 @@ public class SecurityConfig {
     @Bean
     //  BCryptPasswordEncoder 빈을 생성하여 스프링 컨테이너에 등록
     public PasswordEncoder passwordEncoder() {
-        System.out.println("call SecurityConfig.passwordEncoder");
         return new BCryptPasswordEncoder();
     }
 
