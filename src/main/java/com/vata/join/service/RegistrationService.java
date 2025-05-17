@@ -25,18 +25,14 @@ public class RegistrationService {
 
     public void signup(SignupRequest signupRequest) {
         // 중복 검사
-        if (userRepository.findByUsername(signupRequest.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
+        if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일 주소입니다.");
         }
         if (userRepository.findByNickname(signupRequest.getNickname()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
-        if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일 주소입니다.");
-        }
 
         User user = new User();
-        user.setUsername(signupRequest.getUsername());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         // 비밀번호 암호화하여 User 객체에 저장
         user.setNickname(signupRequest.getNickname());
