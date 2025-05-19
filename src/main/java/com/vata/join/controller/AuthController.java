@@ -16,10 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; // http 응답을 나타내는 객체 (상태 코드 + 메시지)
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController // RESTful API의 컨트롤러 (@Controller와 @ResponseBody를 포함)
 @RequestMapping("/api/auth") // 해당 컨트롤러의 모든 API 엔드포인트의 기본 URL -> /api/auth로 설정
@@ -50,6 +47,13 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        // SecurityConfig에서 로그아웃 처리를 설정했으므로
+        // 컨트롤러에서 직접 세션 무효화 등을 처리할 필요는 없습니다.
+        return "redirect:/login"; // 로그아웃 후 이동할 URL
     }
 
 }
