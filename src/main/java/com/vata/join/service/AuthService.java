@@ -56,6 +56,12 @@ public class AuthService implements UserDetailsService {
           SpringSecurity의 UserDetails 객체를 생성하여 반환
         - 만약 사용자가 존재하지 않으면, UsernameNotFoundException 예외를 던져서
           SpringSecurity에게 해당 사용자를 찾을 수 없음을 알림
+    Spring Security의 로그아웃 처리
+        - 세션 기반 인증의 로그아웃은 주로 SpringSecurity 프레임워크가 담당
+        - 클라이언트가 설정된 로그아웃 url로 요청을 보냄 (SecurityConfig에서 설정)
+        - Spring Security의 LogoutFilter가 해당 요청 가로챔
+        - LogoutFilter가 설정된 대로 다음 작업 수행 (SecurityConfig에서 설정)
+
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -73,7 +79,6 @@ public class AuthService implements UserDetailsService {
         - request 파라미터 : HTTP 요청 객체, 세션 생성 및 관리하는 데 사용
         - 사용자 조회 : 데이터베이스 -> findByEmail -> 해당 user 객체 생성
         - 비밀번호 확인 : 데이터베이스 pw와 파라미터 pw 비교 -> session 생성 및 정보 저장
-
      */
     public void login(String email, String password, HttpServletRequest request) {
         // 1. 이메일로 사용자 조회
