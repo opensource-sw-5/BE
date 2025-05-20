@@ -2,7 +2,9 @@ package com.vata.profile.application;
 
 import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
+import com.vata.profile.domain.entity.Profile;
 import com.vata.profile.domain.entity.UserInput;
+import com.vata.profile.domain.service.ProfileService;
 import com.vata.profile.domain.service.StabilityImageService;
 import com.vata.profile.infrastructure.MinioService;
 import java.io.ByteArrayInputStream;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ProfilePromptFacade {
+    private final ProfileService profileService;
     private final StabilityImageService stabilityImageService;
     private final MinioService minioService;
 
@@ -31,6 +34,8 @@ public class ProfilePromptFacade {
                 imageBytes.length,
                 CONTENT_TYPE
         );
+
+        profileService.save(userId, imageUrl);
 
         return new ImageGenerateResponse(imageUrl, CONTENT_TYPE);
     }
