@@ -34,6 +34,19 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                         .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginProcessingUrl("/api/auth/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout") // 로그아웃 요청을 처리할 URL
+                        .invalidateHttpSession(true)  // HTTP 세션 무효화 (default: true)
+                        .deleteCookies("JSESSIONID")   // 로그아웃 시 삭제할 쿠키 (default: JSESSIONID)
+                        .permitAll()
+                        .logoutSuccessUrl("/login")    // 로그아웃 성공 시 이동할 URL (추가)
                 );
         return http.build();
     }
