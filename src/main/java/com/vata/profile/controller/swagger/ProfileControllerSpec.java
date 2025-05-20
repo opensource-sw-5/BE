@@ -28,9 +28,9 @@ public interface ProfileControllerSpec {
     String GENERATE_PROFILE_PROMPT_REQUEST = """
             {
               "gender": "FEMALE",
-              "mbti": "INFP",
-              "hobby": "reading a book",
-              "characterType": "CHARACTER",
+              "mbti": "ENTJ",
+              "hobby": "playing the guitar",
+              "characterType": "AVATAR",
               "styleType": "MODEL_3D",
               "etc": "Make the background feel like a warm and cozy library."
             }
