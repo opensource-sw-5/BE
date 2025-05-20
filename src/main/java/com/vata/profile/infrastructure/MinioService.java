@@ -1,11 +1,10 @@
-package com.vata.common.service;
+package com.vata.profile.infrastructure;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
-import org.springframework.stereotype.Component;
-
 import java.io.InputStream;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MinioService {

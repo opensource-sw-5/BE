@@ -1,4 +1,4 @@
 package com.vata.profile.controller.dto;
 
-public record ImageGenerateResponse(byte[] image, String contentType) {
+public record ImageGenerateResponse(String imageUrl, String contentType) {
 }
