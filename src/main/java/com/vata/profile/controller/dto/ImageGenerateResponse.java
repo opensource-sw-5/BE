@@ -1,4 +1,6 @@
 package com.vata.profile.controller.dto;
 
-public record ImageGenerateResponse(String imageUrl, String contentType) {
+import java.time.LocalDateTime;
+
+public record ImageGenerateResponse(String imageUrl, LocalDateTime createdAt, String contentType) {
 }

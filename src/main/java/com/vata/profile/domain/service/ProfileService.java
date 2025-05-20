@@ -12,11 +12,11 @@ public class ProfileService {
     private final ProfileRepository profileRepository;
 
     @Transactional
-    public void save(Long userId, String imageUrl) {
+    public Profile save(Long userId, String imageUrl) {
         Profile profile = Profile.builder()
                 .userId(userId)
                 .profileUrl(imageUrl)
                 .build();
-        profileRepository.save(profile);
+        return profileRepository.save(profile);
     }
 }
