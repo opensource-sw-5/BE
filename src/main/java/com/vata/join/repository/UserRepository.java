@@ -10,6 +10,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // 주어진 매개변수로 사용자를 조회하는 메서드
     // 결과가 없을 경우 Optional.empty()를 반환
-    Optional<User> findByNickname(String nickname);
+    Optional<User> findByName(String name);
     Optional<User> findByEmail(String email);
 }

@@ -18,6 +18,6 @@ public class User {
 
     private String email;    // 이메일(아이디)
     private String password;    // 비밀번호
-    private String nickname;    // 닉네임
+    private String name;    // 닉네임
 
 }
