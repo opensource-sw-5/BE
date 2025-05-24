@@ -1,5 +1,6 @@
 package com.vata.join.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,8 +38,16 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginProcessingUrl("/api/auth/login")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/login?error")
+                        .successHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"message\": \"Login success\"}");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"Login failed\"}");
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
