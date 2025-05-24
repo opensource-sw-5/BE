@@ -48,12 +48,4 @@ public class AuthController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        // SecurityConfig에서 로그아웃 처리를 설정했으므로
-        // 컨트롤러에서 직접 세션 무효화 등을 처리할 필요는 없습니다.
-        return "redirect:/"; // 로그아웃 후 이동할 URL
-    }
-
 }
