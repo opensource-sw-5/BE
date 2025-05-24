@@ -1,10 +1,14 @@
 package com.vata.join.config;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -12,7 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity  // 스프링 시큐리티 기능 활성화
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final UserDetailsService userDetailsService; // UserDetailsService 주입
 
     private static final String[] PERMIT_ALL_PATTERNS = {
             "/api/auth/**",
@@ -25,6 +32,18 @@ public class SecurityConfig {
     //  BCryptPasswordEncoder 빈을 생성하여 스프링 컨테이너에 등록
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // AuthenticationManager Bean 등록
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
+                .userDetailsService(userDetailsService) // 우리가 구현한 UserDetailsService (AuthService) 연결
+                .passwordEncoder(passwordEncoder()); // 사용할 PasswordEncoder 연결
+
+        return authenticationManagerBuilder.build();
     }
 
     //  HTTP 요청에 대한 보안 설정을 정의
