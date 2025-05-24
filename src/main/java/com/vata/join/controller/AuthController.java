@@ -42,7 +42,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         try {
-            authService.login(loginRequest.getEmail(), loginRequest.getPassword(), request);
+            authService.login(loginRequest.email(), loginRequest.password(), request);
             return ResponseEntity.ok("로그인 성공");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

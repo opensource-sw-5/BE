@@ -33,18 +33,18 @@ public class AuthService implements UserDetailsService {
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
         // 중복 검사
-        if (userRepository.findByEmail(signupRequest.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(signupRequest.email()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 이메일 주소입니다.");
         }
-        if (userRepository.findByNickname(signupRequest.getNickname()).isPresent()) {
+        if (userRepository.findByNickname(signupRequest.nickname()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
         User user = new User();
-        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setPassword(passwordEncoder.encode(signupRequest.password()));
         // 비밀번호 암호화하여 User 객체에 저장
-        user.setNickname(signupRequest.getNickname());
-        user.setEmail(signupRequest.getEmail());
+        user.setNickname(signupRequest.nickname());
+        user.setEmail(signupRequest.email());
 
         userRepository.save(user);  //JpaRepository 로부터 상속
     }
