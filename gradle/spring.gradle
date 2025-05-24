@@ -18,6 +18,9 @@ dependencies {
     // WebSocket (for real-time communication)
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
 //    // feign client
 //    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }

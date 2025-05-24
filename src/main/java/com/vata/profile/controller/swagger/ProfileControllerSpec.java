@@ -1,5 +1,6 @@
 package com.vata.profile.controller.swagger;
 
+import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,14 +23,14 @@ public interface ProfileControllerSpec {
                     )
             )
     )
-    ResponseEntity<byte[]> generateImage(UserInputRequest request);
+    ResponseEntity<ImageGenerateResponse> generateImage(UserInputRequest request);
 
     String GENERATE_PROFILE_PROMPT_REQUEST = """
             {
               "gender": "FEMALE",
-              "mbti": "INFP",
-              "hobby": "reading a book",
-              "characterType": "CHARACTER",
+              "mbti": "ENTJ",
+              "hobby": "playing the guitar",
+              "characterType": "AVATAR",
               "styleType": "MODEL_3D",
               "etc": "Make the background feel like a warm and cozy library."
             }
