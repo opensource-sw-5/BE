@@ -9,6 +9,7 @@ package com.vata.join.service;
 import com.vata.join.domain.User;
 import com.vata.join.dto.SignupRequest;
 import com.vata.join.repository.UserRepository;
+import com.vata.join.security.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -65,13 +66,10 @@ public class AuthService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email)
-                .map(user -> new org.springframework.security.core.userdetails.User(
-                        user.getEmail(),
-                        user.getPassword(),
-                        List.of(new SimpleGrantedAuthority("USER"))
-                ))
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일의 사용자를 찾을 수 없습니다: " + email));
+
+        return new CustomUserDetails(user);
     }
 
     /*
