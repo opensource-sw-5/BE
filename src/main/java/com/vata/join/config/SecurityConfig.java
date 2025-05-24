@@ -54,8 +54,12 @@ public class SecurityConfig {
                         .logoutUrl("/api/auth/logout") // 로그아웃 요청을 처리할 URL
                         .invalidateHttpSession(true)  // HTTP 세션 무효화 (default: true)
                         .deleteCookies("JSESSIONID")   // 로그아웃 시 삭제할 쿠키 (default: JSESSIONID)
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"message\": \"Logout successful\"}");
+                        })
                         .permitAll()
-                        .logoutSuccessUrl("/")    // 로그아웃 성공 시 이동할 URL (추가)
                 );
         return http.build();
     }
