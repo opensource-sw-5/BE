@@ -17,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,9 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service    // 스프링의 서비스 컴포넌트로 등록
 @RequiredArgsConstructor
@@ -44,14 +40,14 @@ public class AuthService implements UserDetailsService {
         if (userRepository.findByEmail(signupRequest.email()).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 이메일 주소입니다.");
         }
-        if (userRepository.findByNickname(signupRequest.nickname()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
+        if (userRepository.findByName(signupRequest.name()).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 이름입니다.");
         }
 
         User user = new User();
         user.setPassword(passwordEncoder.encode(signupRequest.password()));
         // 비밀번호 암호화하여 User 객체에 저장
-        user.setNickname(signupRequest.nickname());
+        user.setName(signupRequest.name());
         user.setEmail(signupRequest.email());
 
         userRepository.save(user);  //JpaRepository 로부터 상속
