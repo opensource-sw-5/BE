@@ -1,5 +1,6 @@
 package com.vata.join.config;
 
+import com.vata.join.service.UserDetailService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService; // UserDetailsService 주입
+    private final UserDetailService userDetailService; // UserDetailService 주입
 
     private static final String[] PERMIT_ALL_PATTERNS = {
             "/api/auth/**",
@@ -40,7 +40,7 @@ public class SecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder
-                .userDetailsService(userDetailsService) // 우리가 구현한 UserDetailsService (AuthService) 연결
+                .userDetailsService(userDetailService) // 우리가 구현한 UserDetailsService (UserDetailService) 연결
                 .passwordEncoder(passwordEncoder()); // 사용할 PasswordEncoder 연결
 
         return authenticationManagerBuilder.build();
@@ -54,31 +54,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                         .anyRequest().authenticated()
-                )
-                .formLogin(form -> form
-                        .loginProcessingUrl("/api/auth/login")
-                        .successHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"message\": \"Login success\"}");
-                        })
-                        .failureHandler((request, response, exception) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"error\": \"Login failed\"}");
-                        })
-                        .permitAll()
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout") // 로그아웃 요청을 처리할 URL
-                        .invalidateHttpSession(true)  // HTTP 세션 무효화 (default: true)
-                        .deleteCookies("JSESSIONID")   // 로그아웃 시 삭제할 쿠키 (default: JSESSIONID)
-                        .logoutSuccessHandler((request, response, authentication) -> {
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"message\": \"Logout successful\"}");
-                        })
-                        .permitAll()
                 );
         return http.build();
     }
