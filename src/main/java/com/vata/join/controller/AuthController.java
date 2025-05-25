@@ -9,8 +9,9 @@ RegistrationController
 package com.vata.join.controller;
 
 import com.vata.join.dto.LoginRequest;
-import com.vata.join.service.AuthService;
+import com.vata.join.service.UserDetailService;
 import com.vata.join.dto.SignupRequest;
+import com.vata.join.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,14 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/signup") // /signup 경로로 들어오는 POST 요청을 처리하는 메서드 정의
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest signupRequest) {
         // @Valid : SignupRequest 객체의 유효성 검사를 수행하도록 스프링에게 지시
         // @RequestBody : 요청 본문에 담긴 JSON 데이터 -> SignupRequest 객체로 변환
         try {
-            authService.signup(signupRequest);
+            userService.signup(signupRequest);
             return new ResponseEntity<>("회원가입이 완료되었습니다.", HttpStatus.CREATED);
             // 성공 응답 ("회원가입이 완료되었습니다." + HTTP 상태 코드 201 (Created))
         } catch (IllegalArgumentException e) {
@@ -42,7 +43,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         try {
-            authService.login(loginRequest.email(), loginRequest.password(), request);
+            userService.login(loginRequest.email(), loginRequest.password(), request);
             return ResponseEntity.ok("로그인 성공");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
