@@ -13,11 +13,9 @@ import jakarta.validation.constraints.Size;
 
 public record SignupRequest (
         @NotBlank(message = "이메일(아이디)을 입력해주세요.")
-        @Email(message = "유효한 이메일 주소를 입력해주세요.") // 아이디가 이메일이라면 여기에 @Email을 붙이는 것이 자연스럽습니다.
         String email, // User 엔티티의 email과 동일하게 사용하며, 이것이 아이디 역할을 합니다.
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
-        @Size(min = 8, message = "비밀번호는 최소 8자 이상이어야 합니다.")
         String password,
 
         @NotBlank(message = "이름을 입력해주세요.") // 엔티티 필드명 'name'과 일치
