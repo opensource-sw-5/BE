@@ -32,7 +32,7 @@ public class AuthService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
