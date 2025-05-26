@@ -1,8 +1,8 @@
-package com.vata.join.service;
+package com.vata.auth.service;
 
-import com.vata.join.domain.User;
-import com.vata.join.dto.SignupRequest;
-import com.vata.join.repository.UserRepository;
+import com.vata.auth.domain.User;
+import com.vata.auth.dto.SignupRequest;
+import com.vata.auth.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
