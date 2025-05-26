@@ -1,4 +1,4 @@
-package com.vata.auth.config;
+package com.vata.common.configuration;
 
 import com.vata.auth.service.UserDetailService;
 import java.util.List;
