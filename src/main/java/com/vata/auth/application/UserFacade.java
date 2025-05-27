@@ -1,6 +1,7 @@
 package com.vata.auth.application;
 
 import com.vata.auth.domain.entity.User;
+import com.vata.auth.domain.service.UserService;
 import com.vata.auth.dto.SignupRequest;
 import com.vata.auth.domain.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,24 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
-        // 중복 검사
-        if (userRepository.findByEmail(signupRequest.email()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일 주소입니다.");
-        }
-
-        User user = new User();
-        user.setPassword(passwordEncoder.encode(signupRequest.password()));
-        // 비밀번호 암호화하여 User 객체에 저장
-        user.setName(signupRequest.name());
-        user.setEmail(signupRequest.email());
-
-        userRepository.save(user);  //JpaRepository 로부터 상속
+        userService.save(signupRequest);
     }
 
     /*
