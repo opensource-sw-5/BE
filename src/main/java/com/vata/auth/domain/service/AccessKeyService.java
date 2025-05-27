@@ -16,4 +16,11 @@ public class AccessKeyService {
         AccessKey key = AccessKey.of(userId, value);
         accessKeyRepository.save(key);
     }
+
+    @Transactional(readOnly = true)
+    public String getValue(Long userId) {
+        return accessKeyRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
+                .map(AccessKey::getValue)
+                .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId = " + userId));
+    }
 }
