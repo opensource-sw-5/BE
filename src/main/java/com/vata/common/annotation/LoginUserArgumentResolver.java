@@ -21,7 +21,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(LoginUser.class)
-                && parameter.getParameterType().equals(User.class);
+                && Long.class.equals(parameter.getParameterType());
     }
 
     @Override
@@ -37,10 +37,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         Object principal = authentication.getPrincipal();
 
-        if (principal instanceof User) {
-            return principal;
-        } else if (principal instanceof UserDetails) {
-            return userRepository.findByEmail(((UserDetails) principal).getUsername()).orElse(null);
+        if (principal instanceof User user) {
+            return user.getId();
+        } else if (principal instanceof UserDetails details) {
+            User user = userRepository.findByEmail(details.getUsername()).orElse(null);
+            return user != null ? user.getId() : null;
         }
 
         return null;
