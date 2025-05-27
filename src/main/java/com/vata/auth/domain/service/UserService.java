@@ -3,6 +3,7 @@ package com.vata.auth.domain.service;
 import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.repository.UserRepository;
 import com.vata.auth.dto.SignupRequest;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,12 @@ public class UserService {
         validateEmail(signupRequest.email());
         User user = User.of(signupRequest, passwordEncoder);
         return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User getById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("사용자를 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
