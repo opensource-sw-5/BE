@@ -1,5 +1,6 @@
 package com.vata.auth.domain.entity;
 
+import com.vata.auth.dto.AccessKeyCreateRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 
 @Entity
 @Table(name = "access-key")
@@ -29,4 +31,11 @@ public class AccessKey {
 
     @Column(name = "value", nullable = false)
     private String value;
+
+    public static AccessKey of (Long userId, String value){
+        return AccessKey.builder()
+                .userId(userId)
+                .value(value)
+                .build();
+    }
 }
