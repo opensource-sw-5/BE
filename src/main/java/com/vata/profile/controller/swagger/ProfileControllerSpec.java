@@ -1,5 +1,6 @@
 package com.vata.profile.controller.swagger;
 
+import com.vata.common.annotation.LoginUser;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,7 @@ public interface ProfileControllerSpec {
                     )
             )
     )
-    ResponseEntity<ImageGenerateResponse> generateImage(UserInputRequest request);
+    ResponseEntity<ImageGenerateResponse> generateImage(@LoginUser Long userId, UserInputRequest request);
 
     String GENERATE_PROFILE_PROMPT_REQUEST = """
             {

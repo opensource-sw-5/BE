@@ -1,5 +1,6 @@
 package com.vata.profile.controller;
 
+import com.vata.common.annotation.LoginUser;
 import com.vata.profile.application.ProfilePromptFacade;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
@@ -20,8 +21,9 @@ public class ProfileController implements ProfileControllerSpec {
 
     @PostMapping("/generate")
     @Override
-    public ResponseEntity<ImageGenerateResponse> generateImage(@RequestBody UserInputRequest request) {
-        ImageGenerateResponse response = profilePromptFacade.generateProfileImage(request);
+    public ResponseEntity<ImageGenerateResponse> generateImage(@LoginUser Long userId,
+                                                               @RequestBody UserInputRequest request) {
+        ImageGenerateResponse response = profilePromptFacade.generateProfileImage(userId, request);
 
         return ResponseEntity.ok(response);
     }

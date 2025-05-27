@@ -16,10 +16,7 @@ public class StabilityImageService {
 
     private final StabilityRestClient stabilityRestClient;
 
-    public byte[] generateImage(Long userId, String prompt, StyleType styleType) {
-        // String apiKey = userRepository.findApiKeyByUserId(userId)
-        //        .orElseThrow(() -> new IllegalArgumentException("API 키가 존재하지 않습니다. userId=" + userId));
-        String apiKey = "";
+    public byte[] generateImage(String prompt, String apiKey, StyleType styleType) {
         long seed = generateSeed();
 
         ResponseEntity<byte[]> response = stabilityRestClient.generateImage(
