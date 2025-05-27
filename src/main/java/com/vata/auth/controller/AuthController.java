@@ -8,20 +8,24 @@ RegistrationController
  */
 package com.vata.auth.controller;
 
+import com.vata.auth.application.UserFacade;
+import com.vata.auth.controller.swagger.AuthControllerSpec;
 import com.vata.auth.dto.LoginRequest;
 import com.vata.auth.dto.SignupRequest;
-import com.vata.auth.application.UserFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity; // http 응답을 나타내는 객체 (상태 코드 + 메시지)
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController // RESTful API의 컨트롤러 (@Controller와 @ResponseBody를 포함)
 @RequestMapping("/api/auth") // 해당 컨트롤러의 모든 API 엔드포인트의 기본 URL -> /api/auth로 설정
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerSpec {
 
     private final UserFacade userFacade;
 
@@ -44,6 +48,16 @@ public class AuthController {
         try {
             userFacade.login(loginRequest.email(), loginRequest.password(), request);
             return ResponseEntity.ok("로그인 성공");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        try {
+            userFacade.logout(request);
+            return ResponseEntity.ok("로그아웃 되었습니다.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

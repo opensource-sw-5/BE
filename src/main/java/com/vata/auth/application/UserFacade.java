@@ -56,4 +56,11 @@ public class UserFacade {
             throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못되었습니다.");
         }
     }
+
+    public void logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 }
