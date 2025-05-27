@@ -1,4 +1,4 @@
-package com.vata.auth.domain;
+package com.vata.auth.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,8 +1,8 @@
-package com.vata.auth.service;
+package com.vata.auth.application;
 
-import com.vata.auth.domain.User;
+import com.vata.auth.domain.entity.User;
 import com.vata.auth.dto.SignupRequest;
-import com.vata.auth.repository.UserRepository;
+import com.vata.auth.domain.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserFacade {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;

@@ -4,10 +4,10 @@
     1. 중복된 사용자 정보 있는지 확인
     2. 새로운 사용자 정보 데이터베이스 저장
  */
-package com.vata.auth.service;
+package com.vata.auth.domain.service;
 
-import com.vata.auth.domain.User;
-import com.vata.auth.repository.UserRepository;
+import com.vata.auth.domain.entity.User;
+import com.vata.auth.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,7 +1,7 @@
 package com.vata.common.annotation;
 
-import com.vata.auth.domain.User;
-import com.vata.auth.repository.UserRepository;
+import com.vata.auth.domain.entity.User;
+import com.vata.auth.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
