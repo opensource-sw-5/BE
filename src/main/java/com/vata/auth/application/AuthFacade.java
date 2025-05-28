@@ -1,8 +1,7 @@
-package com.vata.auth.service;
+package com.vata.auth.application;
 
-import com.vata.auth.domain.User;
+import com.vata.auth.domain.service.UserService;
 import com.vata.auth.dto.SignupRequest;
-import com.vata.auth.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,32 +10,19 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+public class AuthFacade {
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
-        // 중복 검사
-        if (userRepository.findByEmail(signupRequest.email()).isPresent()) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일 주소입니다.");
-        }
-
-        User user = new User();
-        user.setPassword(passwordEncoder.encode(signupRequest.password()));
-        // 비밀번호 암호화하여 User 객체에 저장
-        user.setName(signupRequest.name());
-        user.setEmail(signupRequest.email());
-
-        userRepository.save(user);  //JpaRepository 로부터 상속
+        userService.save(signupRequest);
     }
 
     /*
@@ -65,6 +51,13 @@ public class UserService {
                     SecurityContextHolder.getContext());
         } catch (BadCredentialsException e) {
             throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못되었습니다.");
+        }
+    }
+
+    public void logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
         }
     }
 }

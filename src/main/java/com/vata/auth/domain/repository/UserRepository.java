@@ -1,6 +1,6 @@
-package com.vata.auth.repository;
+package com.vata.auth.domain.repository;
 
-import com.vata.auth.domain.User;
+import com.vata.auth.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

@@ -1,5 +1,6 @@
 package com.vata.profile.application;
 
+import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import com.vata.profile.domain.entity.Profile;
@@ -17,15 +18,15 @@ import org.springframework.stereotype.Service;
 public class ProfilePromptFacade {
     private final ProfileService profileService;
     private final StabilityImageService stabilityImageService;
+    private final AccessKeyService accessKeyService;
     private final MinioService minioService;
 
     private static final String CONTENT_TYPE = "image/jpeg";
 
-    public ImageGenerateResponse generateProfileImage(UserInputRequest request) {
+    public ImageGenerateResponse generateProfileImage(Long userId, UserInputRequest request) {
         String prompt = generatePrompt(request);
-        Long userId = 1L; // TODO: 실제 사용자 ID로 교체
-
-        byte[] imageBytes = stabilityImageService.generateImage(userId, prompt, request.styleType());
+        String apiKey = accessKeyService.getValue(userId);
+        byte[] imageBytes = stabilityImageService.generateImage(prompt, apiKey, request.styleType());
 
         String filePath = String.format("profiles/%d/%s.jpg", userId, UUID.randomUUID());
         String imageUrl = minioService.uploadFile(

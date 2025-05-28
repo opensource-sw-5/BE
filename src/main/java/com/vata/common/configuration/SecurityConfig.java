@@ -1,6 +1,6 @@
 package com.vata.common.configuration;
 
-import com.vata.auth.service.UserDetailService;
+import com.vata.auth.domain.service.UserDetailService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

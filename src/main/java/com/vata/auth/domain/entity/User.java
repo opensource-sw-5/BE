@@ -1,5 +1,6 @@
-package com.vata.auth.domain;
+package com.vata.auth.domain.entity;
 
+import com.vata.auth.dto.SignupRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,16 +9,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Collection;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -33,6 +41,14 @@ public class User implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;    // 닉네임
 
+    public static User of(SignupRequest signupRequest, PasswordEncoder passwordEncoder) {
+        return User.builder()
+                .email(signupRequest.email())
+                .name(signupRequest.name())
+                .password(passwordEncoder.encode(signupRequest.password()))
+                .build();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
@@ -40,7 +56,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override
