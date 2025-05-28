@@ -1,12 +1,3 @@
-# 빌드 단계
-FROM gradle:8.0-jdk17 AS builder
-
-WORKDIR /home/app
-
-COPY . .
-
-RUN gradle build --no-daemon -x test
-
 # 실행 단계
 FROM openjdk:17-jdk-slim
 
@@ -18,7 +9,7 @@ RUN apt-get update && apt-get install -y tzdata && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
     apt-get clean
 
-COPY --from=builder /home/app/build/libs/*.jar app.jar
+COPY build/libs/*.jar app.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 

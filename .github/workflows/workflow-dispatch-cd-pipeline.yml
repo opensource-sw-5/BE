@@ -16,6 +16,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon -x test
           
       # Dockerfile app 이미지 build & push
       - name: Docker Log in
