@@ -24,7 +24,7 @@ public interface ProfileControllerSpec {
                     )
             )
     )
-    ResponseEntity<ImageGenerateResponse> generateImage(@LoginUser Long userId, UserInputRequest request);
+    ResponseEntity<?> generateImage(@LoginUser Long userId, UserInputRequest request);
 
     String GENERATE_PROFILE_PROMPT_REQUEST = """
             {

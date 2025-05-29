@@ -21,10 +21,13 @@ public class ProfileController implements ProfileControllerSpec {
 
     @PostMapping("/generate")
     @Override
-    public ResponseEntity<ImageGenerateResponse> generateImage(@LoginUser Long userId,
+    public ResponseEntity<?> generateImage(@LoginUser Long userId,
                                                                @RequestBody UserInputRequest request) {
-        ImageGenerateResponse response = profilePromptFacade.generateProfileImage(userId, request);
-
-        return ResponseEntity.ok(response);
+        try {
+            ImageGenerateResponse response = profilePromptFacade.generateProfileImage(userId, request);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
