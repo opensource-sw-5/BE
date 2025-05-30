@@ -1,8 +1,6 @@
 package com.vata.auth.domain.service;
 
-import com.vata.auth.domain.entity.AccessKey;
 import com.vata.auth.domain.entity.User;
-import com.vata.auth.domain.repository.AccessKeyRepository;
 import com.vata.auth.domain.repository.UserRepository;
 import com.vata.auth.dto.SignupRequest;
 import java.util.NoSuchElementException;
@@ -15,23 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final AccessKeyRepository accessKeyRepository; // AccessKeyRepository 주입
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public User save(SignupRequest signupRequest) {
         validateEmail(signupRequest.email());
-
-        // 1. User 엔티티 생성 및 저장
         User user = User.of(signupRequest, passwordEncoder);
-        User savedUser = userRepository.save(user); // 저장된 User 객체를 받아 ID를 사용
-
-        // 2. AccessKey 엔티티 생성 및 저장 (Stability AI Access Token 저장)
-        // User 객체가 DB에 저장되어야 ID를 얻을 수 있으므로, savedUser.getId()를 사용
-        AccessKey accessKey = AccessKey.of(savedUser.getId(), signupRequest.stabilityApiAccessToken());
-        accessKeyRepository.save(accessKey); // AccessKey 저장
-
-        return savedUser;
+        return userRepository.save(user);
     }
 
     @Transactional(readOnly = true)
