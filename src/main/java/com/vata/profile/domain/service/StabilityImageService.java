@@ -1,8 +1,6 @@
 package com.vata.profile.domain.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vata.auth.domain.entity.AccessKey;
-import com.vata.auth.domain.repository.AccessKeyRepository;
 import com.vata.profile.domain.entity.vo.NegativePrompt;
 import com.vata.profile.domain.entity.vo.StyleType;
 import com.vata.profile.infrastructure.StabilityRestClient;
@@ -17,15 +15,8 @@ public class StabilityImageService {
     private static final long MAX_SEED = 4294967294L;
 
     private final StabilityRestClient stabilityRestClient;
-    private final AccessKeyRepository accessKeyRepository; // AccessKeyRepository 주입
 
-    public byte[] generateImage(Long userId, String prompt, StyleType styleType) {
-        // 1. 사용자 ID로 AccessKey 조회
-        AccessKey accessKey = accessKeyRepository.findFirstByUserIdOrderByCreatedAtDesc(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자의 Stability AI Access Key를 찾을 수 없습니다. 프로필을 생성하기 전에 Access Key를 설정해주세요."));
-
-        String apiKey = accessKey.getValue(); // 조회된 Access Key 값 사용
-
+    public byte[] generateImage(String prompt, String apiKey, StyleType styleType) {
         long seed = generateSeed();
 
         ResponseEntity<byte[]> response = stabilityRestClient.generateImage(
