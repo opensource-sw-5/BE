@@ -1,5 +1,7 @@
 package com.vata.auth.application;
 
+import com.vata.auth.domain.entity.User;
+import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.auth.domain.service.UserService;
 import com.vata.auth.dto.SignupRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthFacade {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
+    private final AccessKeyService accessKeyService;
 
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
-        userService.save(signupRequest);
+        User user = userService.save(signupRequest);
+        accessKeyService.save(user.getId(), signupRequest.stabilityApiAccessToken());
     }
-
     /*
     로그인 처리 메서드
         - request 파라미터 : HTTP 요청 객체, 세션 생성 및 관리하는 데 사용
