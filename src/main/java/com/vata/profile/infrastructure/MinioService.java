@@ -4,6 +4,7 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import java.io.InputStream;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,8 +12,11 @@ public class MinioService {
 
     private final MinioClient minioClient;
 
-    private static final String BUCKET_NAME = "vata";
-    private static final String PUBLIC_URL = "http://localhost:9000";
+    @Value("${minio.bucketName}")
+    private String bucketName;
+
+    @Value("${minio.publicUrl}")
+    private String publicUrl;
 
     public MinioService(MinioClient minioClient) {
         this.minioClient = minioClient;
@@ -22,7 +26,7 @@ public class MinioService {
         try {
             minioClient.putObject(
                     PutObjectArgs.builder()
-                            .bucket(BUCKET_NAME)
+                            .bucket(bucketName)
                             .object(path)
                             .stream(inputStream, contentLength, -1)
                             .contentType(contentType)
@@ -38,7 +42,7 @@ public class MinioService {
         try {
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
-                            .bucket(BUCKET_NAME)
+                            .bucket(bucketName)
                             .object(path)
                             .build()
             );
@@ -48,6 +52,6 @@ public class MinioService {
     }
 
     private String getPublicUrl(String path) {
-        return String.format("%s/%s/%s", PUBLIC_URL, BUCKET_NAME, path);
+        return String.format("%s/%s/%s", publicUrl, bucketName, path);
     }
 }

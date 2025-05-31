@@ -42,7 +42,7 @@ public class StabilityImageService {
                 errorMessage = "에러 메시지 파싱 실패";
             }
 
-            throw new IllegalStateException(
+            throw new IllegalArgumentException(
                     "이미지 생성 실패: " + errorMessage + " (status=" + response.getStatusCode() + ")");
         }
     }

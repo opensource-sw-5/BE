@@ -3,6 +3,7 @@ package com.vata.common.configuration;
 import com.vata.auth.domain.service.UserDetailService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -56,6 +58,9 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())// 개발 편의상 CSRF 비활성화 (실제 서비스에서는 활성화 권장)
                 .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PERMIT_ALL_PATTERNS).permitAll()
                         .anyRequest().authenticated()
@@ -66,6 +71,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+        // config.addAllowedOriginPattern("*");
         config.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
@@ -74,5 +80,15 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
+    }
+
+    @Bean
+    public ServletContextInitializer sameSiteCookieConfig() {
+        return servletContext -> {
+            servletContext.getSessionCookieConfig().setSecure(false);  // HTTP 환경
+            servletContext.getSessionCookieConfig().setHttpOnly(true); // 선택: XSS 보호
+            servletContext.getSessionCookieConfig().setName("JSESSIONID"); // 선택: 명시적 설정
+            // servletContext.getSessionCookieConfig().setMaxAge(...); // 필요한 경우 추가
+        };
     }
 }
