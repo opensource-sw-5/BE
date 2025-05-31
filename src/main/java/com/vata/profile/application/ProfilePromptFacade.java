@@ -2,7 +2,6 @@ package com.vata.profile.application;
 
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
-import com.vata.profile.controller.dto.ProfileListResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import com.vata.profile.domain.entity.Profile;
 import com.vata.profile.domain.entity.UserInput;
@@ -12,10 +11,6 @@ import com.vata.profile.infrastructure.MinioService;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,17 +39,6 @@ public class ProfilePromptFacade {
         Profile profile = profileService.save(userId, imageUrl);
 
         return new ImageGenerateResponse(imageUrl, profile.getCreatedAt(), CONTENT_TYPE);
-    }
-
-    public Page<ProfileListResponse> getProfileList(Long userId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
-
-        return profileService.findAllByUserId(userId, pageable)
-                .map(profile -> new ProfileListResponse(
-                        profile.getId(),
-                        profile.getProfileUrl(),
-                        profile.getCreatedAt()
-                ));
     }
 
     private String generatePrompt(UserInputRequest request) {
