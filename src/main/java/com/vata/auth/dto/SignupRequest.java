@@ -17,5 +17,8 @@ public record SignupRequest (
         String password,
 
         @NotBlank(message = "이름을 입력해주세요.") // 엔티티 필드명 'name'과 일치
-        String name
+        String name,
+
+        @NotBlank(message = "Stability AI Access Token을 입력해주세요.")
+        String stabilityApiAccessToken // Stability AI Access Token 필드 추가
 ) {}
