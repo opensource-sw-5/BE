@@ -3,12 +3,11 @@ package com.vata.profile.infrastructure;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -25,33 +24,35 @@ public class StabilityRestClient {
     private static final String AUTH_HEADER_PREFIX = "Bearer ";
     private static final String OUTPUT_FORMAT = "jpeg";
 
-    public Mono<byte[]> generateImage(String apiKey, String prompt, String negativePrompt, long seed, String stylePreset) {
+    public Mono<byte[]> generateImage(String apiKey, String prompt, String negativePrompt, long seed,
+                                      String stylePreset) {
         String apiUrl = baseUrl + imageGeneratePath;
 
-        Map<String, Object> formData = new HashMap<>();
-        formData.put("prompt", prompt);
-        formData.put("negative_prompt", negativePrompt);
-        formData.put("seed", seed);
-        formData.put("style_preset", stylePreset);
-        formData.put("output_format", OUTPUT_FORMAT);
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("prompt", prompt).header("Content-Type", "text/plain");
+        builder.part("negative_prompt", negativePrompt).header("Content-Type", "text/plain");
+        builder.part("seed", String.valueOf(seed)).header("Content-Type", "text/plain");
+        builder.part("style_preset", stylePreset).header("Content-Type", "text/plain");
+        builder.part("output_format", OUTPUT_FORMAT).header("Content-Type", "text/plain");
 
         return webClientBuilder.build()
                 .post()
                 .uri(apiUrl)
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .accept(MediaType.IMAGE_JPEG)
                 .header("Authorization", AUTH_HEADER_PREFIX + apiKey)
-                .body(BodyInserters.fromMultipartData(toMultiValueMap(formData)))
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.parseMediaType("image/*"))
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
-                .bodyToMono(byte[].class)
-                .onErrorResume(e -> {
-                    return Mono.error(new IllegalArgumentException("Stability API 호출 실패: " + e.getMessage(), e));
-                });
-    }
-
-    private org.springframework.util.MultiValueMap<String, Object> toMultiValueMap(Map<String, Object> map) {
-        org.springframework.util.LinkedMultiValueMap<String, Object> multiValueMap = new org.springframework.util.LinkedMultiValueMap<>();
-        map.forEach(multiValueMap::add);
-        return multiValueMap;
+                .onStatus(
+                        status -> status.is4xxClientError() || status.is5xxServerError(),
+                        clientResponse -> clientResponse.bodyToMono(String.class).flatMap(errorBody -> {
+                            System.err.println("Stability API 에러 바디: " + errorBody);
+                            return Mono.error(new IllegalArgumentException(
+                                    "Stability API 호출 실패: " + errorBody + " (status=" + clientResponse.statusCode()
+                                            + ")"
+                            ));
+                        })
+                )
+                .bodyToMono(byte[].class);
     }
 }
