@@ -86,7 +86,7 @@ public class SecurityConfig {
     public ServletContextInitializer sameSiteCookieConfig() {
         return servletContext -> {
             servletContext.getSessionCookieConfig().setSecure(false);  // HTTP 환경
-            servletContext.getSessionCookieConfig().setHttpOnly(true); // 선택: XSS 보호
+            servletContext.getSessionCookieConfig().setHttpOnly(false); // 선택: XSS 보호
             servletContext.getSessionCookieConfig().setName("JSESSIONID"); // 선택: 명시적 설정
             // servletContext.getSessionCookieConfig().setMaxAge(...); // 필요한 경우 추가
         };
