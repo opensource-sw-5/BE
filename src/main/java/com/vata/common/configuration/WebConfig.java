@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080", "http://localhost:3000", "http://jhzlo.world",
-                        "https://jhzlo.world", "https://vata-fe-1cng.vercel.app")
+                        "https://jhzlo.world", "https://vata-fe-1cng.vercel.app", "https://vata-fe.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
