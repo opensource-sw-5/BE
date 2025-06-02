@@ -1,6 +1,7 @@
 package com.vata.profile.controller.swagger;
 
 import com.vata.common.annotation.LoginUser;
+import com.vata.profile.controller.dto.ImageGenerateResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 
 @Tag(name = "Profile Prompt API", description = "AI 프로필 생성 API")
 public interface ProfileControllerSpec {
@@ -24,7 +26,7 @@ public interface ProfileControllerSpec {
                     )
             )
     )
-    ResponseEntity<?> generateImage(@LoginUser Long userId, UserInputRequest request);
+    Mono<ResponseEntity<?>> generateImage(@LoginUser Long userId, UserInputRequest request);
 
     @Operation(
             summary = "프로필 목록 조회",

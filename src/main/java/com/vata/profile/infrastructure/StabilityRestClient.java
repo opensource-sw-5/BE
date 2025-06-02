@@ -2,59 +2,56 @@ package com.vata.profile.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class StabilityRestClient {
 
-    private final RestTemplate restTemplate;
+    private final WebClient.Builder webClientBuilder;
 
     @Value("${stability.api.base-url}")
     private String baseUrl;
 
     @Value("${stability.api.image-generate-path}")
     private String imageGeneratePath;
+
     private static final String AUTH_HEADER_PREFIX = "Bearer ";
-    private static final String ACCEPT_HEADER_VALUE = "image/*";
     private static final String OUTPUT_FORMAT = "jpeg";
 
-    public ResponseEntity<byte[]> generateImage(String apiKey, String prompt, String negativePrompt, long seed,
-                                                String stylePreset) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        headers.set("Authorization", AUTH_HEADER_PREFIX + apiKey);
-        headers.set("Accept", ACCEPT_HEADER_VALUE);
-
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("prompt", prompt);
-        body.add("negative_prompt", negativePrompt);
-        body.add("seed", seed);
-        body.add("style_preset", stylePreset);
-        body.add("output_format", OUTPUT_FORMAT);
-
+    public Mono<byte[]> generateImage(String apiKey, String prompt, String negativePrompt, long seed, String stylePreset) {
         String apiUrl = baseUrl + imageGeneratePath;
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
 
-        try {
-            return restTemplate.exchange(apiUrl, HttpMethod.POST, entity, byte[].class);
-        } catch (HttpClientErrorException | HttpServerErrorException e) {
-            String errorBody = e.getResponseBodyAsString();
-            throw new IllegalArgumentException(
-                    "Stability API 오류 응답: " + errorBody + " (status=" + e.getStatusCode() + ")");
-        } catch (RestClientException e) {
-            throw new IllegalArgumentException("Stability API 호출 실패: " + e.getMessage());
-        }
+        Map<String, Object> formData = new HashMap<>();
+        formData.put("prompt", prompt);
+        formData.put("negative_prompt", negativePrompt);
+        formData.put("seed", seed);
+        formData.put("style_preset", stylePreset);
+        formData.put("output_format", OUTPUT_FORMAT);
+
+        return webClientBuilder.build()
+                .post()
+                .uri(apiUrl)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.IMAGE_JPEG)
+                .header("Authorization", AUTH_HEADER_PREFIX + apiKey)
+                .body(BodyInserters.fromMultipartData(toMultiValueMap(formData)))
+                .retrieve()
+                .bodyToMono(byte[].class)
+                .onErrorResume(e -> {
+                    return Mono.error(new IllegalArgumentException("Stability API 호출 실패: " + e.getMessage(), e));
+                });
+    }
+
+    private org.springframework.util.MultiValueMap<String, Object> toMultiValueMap(Map<String, Object> map) {
+        org.springframework.util.LinkedMultiValueMap<String, Object> multiValueMap = new org.springframework.util.LinkedMultiValueMap<>();
+        map.forEach(multiValueMap::add);
+        return multiValueMap;
     }
 }
