@@ -31,7 +31,7 @@ stability:
   api:
     base-url: https://api.stability.ai
     image-generate-path: /v2beta/stable-image/generate/core
-    account-path: /v1/user/account
+    balance-path: /v1/user/balance
 
 minio:
   endpoint: http://localhost:9000

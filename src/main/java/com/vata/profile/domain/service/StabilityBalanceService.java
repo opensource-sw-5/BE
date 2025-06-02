@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true) // 데이터 변경이 없으므로 읽기 전용 트랜잭션
-public class StabilityAccountService {
+public class StabilityBalanceService {
 
     private final AccessKeyService accessKeyService;
     private final StabilityRestClient stabilityRestClient;
@@ -19,6 +19,6 @@ public class StabilityAccountService {
         String apiKey = accessKeyService.getValue(userId);
 
         // 2. StabilityRestClient를 통해 Stability AI API 호출하여 크레딧 잔액 조회
-        return stabilityRestClient.getAccountCredits(apiKey);
+        return stabilityRestClient.getBalanceCredits(apiKey);
     }
 }
