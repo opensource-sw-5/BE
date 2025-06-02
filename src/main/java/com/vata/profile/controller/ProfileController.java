@@ -3,14 +3,13 @@ package com.vata.profile.controller;
 import com.vata.common.annotation.LoginUser;
 import com.vata.profile.application.ProfilePromptFacade;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
+import com.vata.profile.controller.dto.StabilityCreditsResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import com.vata.profile.controller.swagger.ProfileControllerSpec;
+import com.vata.profile.domain.service.StabilityAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfileController implements ProfileControllerSpec {
 
     private final ProfilePromptFacade profilePromptFacade;
+    private final StabilityAccountService stabilityAccountService; // StabilityAccountService 주입
+
 
     @PostMapping("/generate")
     @Override
@@ -26,5 +27,10 @@ public class ProfileController implements ProfileControllerSpec {
         ImageGenerateResponse response = profilePromptFacade.generateProfileImage(userId, request);
 
         return ResponseEntity.ok(response);
+    }
+    @GetMapping("/credits")
+    public ResponseEntity<StabilityCreditsResponse> getUserCredits(@LoginUser Long userId) {
+        double credits = stabilityAccountService.getUserStabilityCredits(userId);
+        return ResponseEntity.ok(new StabilityCreditsResponse(credits));
     }
 }
