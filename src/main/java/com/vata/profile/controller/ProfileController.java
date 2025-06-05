@@ -29,8 +29,10 @@ public class ProfileController implements ProfileControllerSpec {
         return ResponseEntity.ok(response);
     }
     @GetMapping("/credits")
+    @Override
     public ResponseEntity<StabilityCreditsResponse> getUserCredits(@LoginUser Long userId) {
         double credits = stabilityBalanceService.getUserStabilityCredits(userId);
         return ResponseEntity.ok(new StabilityCreditsResponse(credits));
     }
+
 }
