@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -34,7 +37,8 @@ public class StabilityRestClient {
     private static final String ACCEPT_HEADER_VALUE = "image/*";
     private static final String OUTPUT_FORMAT = "jpeg";
 
-    public ResponseEntity<byte[]> generateImage(String apiKey, String prompt, String negativePrompt, long seed, String stylePreset) {
+    public ResponseEntity<byte[]> generateImage(String apiKey, String prompt, String negativePrompt, long seed,
+                                                String stylePreset) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         headers.set("Authorization", AUTH_HEADER_PREFIX + apiKey);
@@ -48,9 +52,17 @@ public class StabilityRestClient {
         body.add("output_format", OUTPUT_FORMAT);
 
         String apiUrl = baseUrl + imageGeneratePath;
-
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
-        return restTemplate.exchange(apiUrl, HttpMethod.POST, entity, byte[].class);
+
+        try {
+            return restTemplate.exchange(apiUrl, HttpMethod.POST, entity, byte[].class);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            String errorBody = e.getResponseBodyAsString();
+            throw new IllegalArgumentException(
+                    "Stability API 오류 응답: " + errorBody + " (status=" + e.getStatusCode() + ")");
+        } catch (RestClientException e) {
+            throw new IllegalArgumentException("Stability API 호출 실패: " + e.getMessage());
+        }
     }
 
     /*
