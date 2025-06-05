@@ -5,9 +5,11 @@ import com.vata.common.web.PagingResult;
 import com.vata.profile.application.ProfileFacade;
 import com.vata.profile.application.ProfilePromptFacade;
 import com.vata.profile.controller.dto.ImageGenerateResponse;
+import com.vata.profile.controller.dto.StabilityCreditsResponse;
 import com.vata.profile.controller.dto.ProfileListResponse;
 import com.vata.profile.controller.dto.UserInputRequest;
 import com.vata.profile.controller.swagger.ProfileControllerSpec;
+import com.vata.profile.domain.service.StabilityBalanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfileController implements ProfileControllerSpec {
 
     private final ProfilePromptFacade profilePromptFacade;
+    private final StabilityBalanceService stabilityBalanceService; // StabilityAccountService 주입
     private final ProfileFacade profileFacade;
+
 
     @PostMapping("/generate")
     @Override
@@ -47,4 +51,11 @@ public class ProfileController implements ProfileControllerSpec {
         PagingResult<ProfileListResponse> result = PagingResult.from(profileFacade.getProfileList(userId, page, size));
         return ResponseEntity.ok(result);
     }
+    @GetMapping("/credits")
+    @Override
+    public ResponseEntity<StabilityCreditsResponse> getUserCredits(@LoginUser Long userId) {
+        double credits = stabilityBalanceService.getUserStabilityCredits(userId);
+        return ResponseEntity.ok(new StabilityCreditsResponse(credits));
+    }
+
 }
