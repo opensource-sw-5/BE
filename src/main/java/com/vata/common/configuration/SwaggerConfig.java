@@ -24,6 +24,7 @@ public class SwaggerConfig {
                             .version("1.0.0")
                     );
                     openApi.setServers(List.of(
+                            new Server().url("http://localhost:8080").description("Local Server"),
                             new Server().url("https://www.jhzlo.world").description("Production Server")
                     ));
                 })
