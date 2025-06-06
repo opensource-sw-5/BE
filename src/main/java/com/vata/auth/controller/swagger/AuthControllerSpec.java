@@ -28,4 +28,9 @@ public interface AuthControllerSpec {
     ResponseEntity<String> logout(
             HttpServletRequest request
     );
+
+    @Operation(summary = "api key 검증", description = "stability api key 검증")
+    ResponseEntity<String> verifyToken(
+            @Parameter(description = "stability api key") String apiKey
+    );
 }

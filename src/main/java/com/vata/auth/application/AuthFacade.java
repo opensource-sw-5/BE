@@ -4,6 +4,7 @@ import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.auth.domain.service.UserService;
 import com.vata.auth.dto.SignupRequest;
+import com.vata.profile.infrastructure.StabilityRestClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class AuthFacade {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final AccessKeyService accessKeyService;
+    private final StabilityRestClient stabilityRestClient;
 
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
@@ -62,5 +64,9 @@ public class AuthFacade {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    public double getCredits(String apiKey){
+        return stabilityRestClient.getBalanceCredits(apiKey);
     }
 }

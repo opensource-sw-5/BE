@@ -17,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +60,17 @@ public class AuthController implements AuthControllerSpec {
             authFacade.logout(request);
             return ResponseEntity.ok("로그아웃 되었습니다.");
         } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/token/verify")
+    @Override
+    public ResponseEntity<String> verifyToken(String apiKey){
+        try{
+            double credits = authFacade.getCredits(apiKey);
+            return ResponseEntity.ok("인증된 토큰입니다.");
+        }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
