@@ -38,7 +38,7 @@ public class ProfilePromptFacade {
 
         Profile profile = profileService.save(userId, imageUrl);
 
-        return new ImageGenerateResponse(imageUrl, profile.getCreatedAt(), CONTENT_TYPE);
+        return new ImageGenerateResponse(profile.getId(), imageUrl, profile.getCreatedAt(), CONTENT_TYPE);
     }
 
     private String generatePrompt(UserInputRequest request) {
