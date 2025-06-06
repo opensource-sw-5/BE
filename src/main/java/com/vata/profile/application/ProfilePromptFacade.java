@@ -11,8 +11,10 @@ import com.vata.profile.infrastructure.MinioService;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProfilePromptFacade {
@@ -25,6 +27,9 @@ public class ProfilePromptFacade {
 
     public ImageGenerateResponse generateProfileImage(Long userId, UserInputRequest request) {
         String prompt = generatePrompt(request);
+
+        log.info("🎯 Generated Prompt: {}", prompt);
+
         String apiKey = accessKeyService.getValue(userId);
         byte[] imageBytes = stabilityImageService.generateImage(prompt, apiKey, request.styleType());
 
