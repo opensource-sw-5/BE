@@ -64,9 +64,9 @@ public class AuthController implements AuthControllerSpec {
         }
     }
 
-    @GetMapping("/token/verify")
+    @PostMapping("/token/verify")
     @Override
-    public ResponseEntity<String> verifyToken(String apiKey){
+    public ResponseEntity<String> verifyToken(@RequestBody String apiKey){
         try{
             double credits = authFacade.getCredits(apiKey);
             return ResponseEntity.ok("인증된 토큰입니다.");
