@@ -21,6 +21,6 @@ public class UserFacade {
     }
 
     public void saveAccessKey(Long userId, AccessKeyRequest request) {
-        accessKeyService.save(userId, request.value());
+        accessKeyService.save(userId, request.accessToken());
     }
 }
