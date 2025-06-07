@@ -69,7 +69,7 @@ public class AuthController implements AuthControllerSpec {
     @Override
     public ResponseEntity<String> verifyToken(@RequestBody AccessKeyRequest request){
         try{
-            double credits = authFacade.getCredits(request.value());
+            double credits = authFacade.getCredits(request.accessToken());
             return ResponseEntity.ok("인증된 토큰입니다.");
         }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
