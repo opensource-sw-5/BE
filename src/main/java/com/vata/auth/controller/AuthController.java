@@ -10,6 +10,7 @@ package com.vata.auth.controller;
 
 import com.vata.auth.application.AuthFacade;
 import com.vata.auth.controller.swagger.AuthControllerSpec;
+import com.vata.auth.dto.AccessKeyRequest;
 import com.vata.auth.dto.LoginRequest;
 import com.vata.auth.dto.SignupRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,9 +67,9 @@ public class AuthController implements AuthControllerSpec {
 
     @PostMapping("/token/verify")
     @Override
-    public ResponseEntity<String> verifyToken(@RequestBody String apiKey){
+    public ResponseEntity<String> verifyToken(@RequestBody AccessKeyRequest request){
         try{
-            double credits = authFacade.getCredits(apiKey);
+            double credits = authFacade.getCredits(request.value());
             return ResponseEntity.ok("인증된 토큰입니다.");
         }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -1,5 +1,6 @@
 package com.vata.auth.controller.swagger;
 
+import com.vata.auth.dto.AccessKeyRequest;
 import com.vata.auth.dto.LoginRequest;
 import com.vata.auth.dto.SignupRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +32,6 @@ public interface AuthControllerSpec {
 
     @Operation(summary = "api key 검증", description = "stability api key 검증")
     ResponseEntity<String> verifyToken(
-            @Parameter(description = "stability api key") String apiKey
+            @Parameter(description = "stability api key") AccessKeyRequest request
     );
 }
