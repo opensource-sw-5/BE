@@ -11,9 +11,11 @@ import com.vata.profile.infrastructure.MinioService;
 import java.io.ByteArrayInputStream;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProfilePromptFacade {
@@ -26,6 +28,9 @@ public class ProfilePromptFacade {
 
     public Mono<ImageGenerateResponse> generateProfileImage(Long userId, UserInputRequest request) {
         String prompt = generatePrompt(request);
+
+        log.info("🎯 Generated Prompt: {}", prompt);
+
         String apiKey = accessKeyService.getValue(userId);
         String filePath = String.format("profiles/%d/%s.jpg", userId, UUID.randomUUID());
 
@@ -40,7 +45,7 @@ public class ProfilePromptFacade {
                     );
                     Profile profile = profileService.save(userId, imageUrl); // 저장 처리
                     ImageGenerateResponse response = new ImageGenerateResponse(
-                            imageUrl, profile.getCreatedAt(), CONTENT_TYPE
+                            profile.getId(), imageUrl, profile.getCreatedAt(), CONTENT_TYPE
                     );
                     return Mono.just(response);
                 });

@@ -1,6 +1,6 @@
 package com.vata.auth.controller.swagger;
 
-import com.vata.auth.dto.AccessKeyCreateRequest;
+import com.vata.auth.dto.AccessKeyRequest;
 import com.vata.auth.dto.UserResponse;
 import com.vata.common.annotation.LoginUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +19,6 @@ public interface UserControllerSpec {
     @Operation(summary = "access key 등록", description = "stability ai access key를 등록합니다.")
     ResponseEntity<String> saveAccessKey(
             @LoginUser Long userId,
-            @Parameter(description = "access key 정보") @Valid @RequestBody AccessKeyCreateRequest request
+            @Parameter(description = "access key 정보") @Valid @RequestBody AccessKeyRequest request
     );
 }

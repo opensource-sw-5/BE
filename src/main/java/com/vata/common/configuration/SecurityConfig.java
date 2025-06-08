@@ -29,6 +29,8 @@ public class SecurityConfig {
 
     private static final String[] PERMIT_ALL_PATTERNS = {
             "/api/auth/**",
+            "/api/test/**",
+            "/api/profile/credits",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/docs/**"
@@ -56,8 +58,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf((csrf) -> csrf.disable())// 개발 편의상 CSRF 비활성화 (실제 서비스에서는 활성화 권장)
                 .cors(Customizer.withDefaults())
+                .csrf((csrf) -> csrf.disable())// 개발 편의상 CSRF 비활성화 (실제 서비스에서는 활성화 권장)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
@@ -68,25 +70,25 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        // config.addAllowedOriginPattern("*");
-        config.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        // config.addAllowedOriginPattern("*");
+//        config.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:3000", "http://vata.kro.kr:8080"));
+//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+//        config.setAllowedHeaders(List.of("*"));
+//        config.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//        return source;
+//    }
 
     @Bean
     public ServletContextInitializer sameSiteCookieConfig() {
         return servletContext -> {
             servletContext.getSessionCookieConfig().setSecure(false);  // HTTP 환경
-            servletContext.getSessionCookieConfig().setHttpOnly(true); // 선택: XSS 보호
+            servletContext.getSessionCookieConfig().setHttpOnly(false); // 선택: XSS 보호
             servletContext.getSessionCookieConfig().setName("JSESSIONID"); // 선택: 명시적 설정
             // servletContext.getSessionCookieConfig().setMaxAge(...); // 필요한 경우 추가
         };

@@ -1,26 +1,23 @@
 package com.vata.profile.domain.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vata.profile.domain.entity.vo.NegativePrompt;
 import com.vata.profile.domain.entity.vo.StyleType;
-import com.vata.profile.infrastructure.StabilityRestClient;
+import com.vata.profile.infrastructure.StabilityWebClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class StabilityImageService {
     private static final long MAX_SEED = 4294967294L;
 
-    private final StabilityRestClient stabilityRestClient;
+    private final StabilityWebClient stabilityWebClient;
 
     public Mono<byte[]> generateImage(String prompt, String apiKey, StyleType styleType) {
         long seed = generateSeed();
 
-        return stabilityRestClient.generateImage(
+        return stabilityWebClient.generateImage(
                         apiKey,
                         prompt,
                         NegativePrompt.getNegativePrompt(),

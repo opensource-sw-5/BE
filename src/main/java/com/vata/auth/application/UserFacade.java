@@ -3,7 +3,7 @@ package com.vata.auth.application;
 import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.auth.domain.service.UserService;
-import com.vata.auth.dto.AccessKeyCreateRequest;
+import com.vata.auth.dto.AccessKeyRequest;
 import com.vata.auth.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class UserFacade {
         return UserResponse.from(user);
     }
 
-    public void saveAccessKey(Long userId, AccessKeyCreateRequest request) {
-        accessKeyService.save(userId, request.value());
+    public void saveAccessKey(Long userId, AccessKeyRequest request) {
+        accessKeyService.save(userId, request.accessToken());
     }
 }

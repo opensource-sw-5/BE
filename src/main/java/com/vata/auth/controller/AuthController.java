@@ -10,6 +10,7 @@ package com.vata.auth.controller;
 
 import com.vata.auth.application.AuthFacade;
 import com.vata.auth.controller.swagger.AuthControllerSpec;
+import com.vata.auth.dto.AccessKeyRequest;
 import com.vata.auth.dto.LoginRequest;
 import com.vata.auth.dto.SignupRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +61,17 @@ public class AuthController implements AuthControllerSpec {
             authFacade.logout(request);
             return ResponseEntity.ok("로그아웃 되었습니다.");
         } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/token/verify")
+    @Override
+    public ResponseEntity<String> verifyToken(@RequestBody AccessKeyRequest request){
+        try{
+            double credits = authFacade.getCredits(request.accessToken());
+            return ResponseEntity.ok("인증된 토큰입니다.");
+        }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

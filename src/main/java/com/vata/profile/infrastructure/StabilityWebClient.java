@@ -11,9 +11,9 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class StabilityRestClient {
-
+public class StabilityWebClient {
     private final WebClient.Builder webClientBuilder;
+
 
     @Value("${stability.api.base-url}")
     private String baseUrl;

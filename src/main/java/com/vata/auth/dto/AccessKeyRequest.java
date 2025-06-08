@@ -2,7 +2,7 @@ package com.vata.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record AccessKeyCreateRequest(
-        @NotBlank String value
+public record AccessKeyRequest(
+        @NotBlank String accessToken
 ) {
 }
