@@ -3,7 +3,8 @@ package com.vata.profile.application;
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.profile.controller.dto.ProfileListResponse;
 import com.vata.profile.domain.service.ProfileService;
-import com.vata.profile.infrastructure.StabilityRestClient;
+import com.vata.profile.infrastructure.StabilityRestTemplate;
+import com.vata.profile.infrastructure.StabilityWebClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class ProfileFacade {
     private final ProfileService profileService;
     private final AccessKeyService accessKeyService;
-    private final StabilityRestClient stabilityRestClient;
+    private final StabilityRestTemplate stabilityRestTemplate;
 
     public Page<ProfileListResponse> getProfileList(Long userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
@@ -34,6 +35,6 @@ public class ProfileFacade {
         String apiKey = accessKeyService.getValue(userId);
 
         // 2. StabilityRestClient를 통해 Stability AI API 호출하여 크레딧 잔액 조회
-        return stabilityRestClient.getBalanceCredits(apiKey);
+        return stabilityRestTemplate.getBalanceCredits(apiKey);
     }
 }

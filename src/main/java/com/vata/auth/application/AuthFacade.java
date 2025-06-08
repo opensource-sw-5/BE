@@ -4,7 +4,8 @@ import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.auth.domain.service.UserService;
 import com.vata.auth.dto.SignupRequest;
-import com.vata.profile.infrastructure.StabilityRestClient;
+import com.vata.profile.infrastructure.StabilityRestTemplate;
+import com.vata.profile.infrastructure.StabilityWebClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +24,15 @@ public class AuthFacade {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final AccessKeyService accessKeyService;
-    private final StabilityRestClient stabilityRestClient;
+    private final StabilityWebClient stabilityWebClient;
+    private final StabilityRestTemplate stabilityRestTemplate;
 
     @Transactional // signup 메서드에 @Transactional 적용
     public void signup(SignupRequest signupRequest) {
         User user = userService.save(signupRequest);
         accessKeyService.save(user.getId(), signupRequest.stabilityApiAccessToken());
     }
+
     /*
     로그인 처리 메서드
         - request 파라미터 : HTTP 요청 객체, 세션 생성 및 관리하는 데 사용
@@ -59,14 +62,14 @@ public class AuthFacade {
         }
     }
 
-    public void logout(HttpServletRequest request){
+    public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
     }
 
-    public double getCredits(String apiKey){
-        return stabilityRestClient.getBalanceCredits(apiKey);
+    public double getCredits(String apiKey) {
+        return stabilityRestTemplate.getBalanceCredits(apiKey);
     }
 }

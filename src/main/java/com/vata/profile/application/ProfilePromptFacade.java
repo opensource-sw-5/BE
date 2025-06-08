@@ -13,6 +13,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -25,25 +26,29 @@ public class ProfilePromptFacade {
 
     private static final String CONTENT_TYPE = "image/jpeg";
 
-    public ImageGenerateResponse generateProfileImage(Long userId, UserInputRequest request) {
+    public Mono<ImageGenerateResponse> generateProfileImage(Long userId, UserInputRequest request) {
         String prompt = generatePrompt(request);
 
         log.info("🎯 Generated Prompt: {}", prompt);
 
         String apiKey = accessKeyService.getValue(userId);
-        byte[] imageBytes = stabilityImageService.generateImage(prompt, apiKey, request.styleType());
-
         String filePath = String.format("profiles/%d/%s.jpg", userId, UUID.randomUUID());
-        String imageUrl = minioService.uploadFile(
-                filePath,
-                new ByteArrayInputStream(imageBytes),
-                imageBytes.length,
-                CONTENT_TYPE
-        );
 
-        Profile profile = profileService.save(userId, imageUrl);
-
-        return new ImageGenerateResponse(profile.getId(), imageUrl, profile.getCreatedAt(), CONTENT_TYPE);
+        return stabilityImageService.generateImage(prompt, apiKey, request.styleType())
+                .flatMap(imageBytes -> {
+                    // MinIO 저장도 비동기 지원이 되면 here → uploadMono(...)
+                    String imageUrl = minioService.uploadFile( // 동기 방식이면 이 부분만 block() 가능
+                            filePath,
+                            new ByteArrayInputStream(imageBytes),
+                            imageBytes.length,
+                            CONTENT_TYPE
+                    );
+                    Profile profile = profileService.save(userId, imageUrl); // 저장 처리
+                    ImageGenerateResponse response = new ImageGenerateResponse(
+                            profile.getId(), imageUrl, profile.getCreatedAt(), CONTENT_TYPE
+                    );
+                    return Mono.just(response);
+                });
     }
 
     private String generatePrompt(UserInputRequest request) {
