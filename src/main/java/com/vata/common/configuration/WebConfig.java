@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:8080", "http://localhost:3000", "http://jhzlo.world",
                         "https://jhzlo.world", "http://www.jhzlo.world", "https://www.jhzlo.world",
-                        "https://vata-fe-1cng.vercel.app", "https://vata-fe.vercel.app")
+                        "https://vata-fe-1cng.vercel.app", "https://vata-fe.vercel.app", "https://vata.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
