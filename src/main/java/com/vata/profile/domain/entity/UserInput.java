@@ -36,59 +36,62 @@ public class UserInput {
     public String generatePrompt() {
         StringBuilder prompt = new StringBuilder();
 
-        // 취미에 따른 시각적 묘사
+        // 1. 캐릭터 유형 설명 먼저 (animal은 주체를 바꿔줘야 함)
+        String characterDescription = switch (characterType) {
+            case ANIMAL -> "An anthropomorphic cartoon-style animal character, such as a bear, dog, or fox. ";
+            case AVATAR -> "A stylized digital human character. ";
+            case CHARACTER -> "A cartoon or anime-style character. ";
+        };
+
+        // 2. 취미 시각화
         Map<String, String> hobbyVisualDescriptions = Map.of(
                 "운동", "doing exercise in sporty clothing, in action, sweating slightly",
-                "독서", "reading a book while sitting calmly, book in hands",
-                "게임", "playing video games with a controller or headset",
-                "음악 감상", "listening to music with large headphones, eyes closed",
-                "영화 감상", "watching a movie on a screen, cozy atmosphere",
-                "그림 그리기", "drawing with colored pencils or a tablet, sketchpad visible",
-                "사진 촬영", "taking a photo with a DSLR camera, camera in hands"
+                "독서", "reading a book calmly with a book in hand",
+                "게임", "playing video games with a console controller",
+                "음악 감상", "wearing headphones, listening to music with eyes closed",
+                "영화 감상", "watching a movie on a screen with popcorn in hand",
+                "그림 그리기", "drawing or painting with visible art tools",
+                "사진 촬영", "holding a camera and taking photos outdoors"
         );
 
-        // 취미에 따른 배경 제안
+        // 3. 배경 묘사
         Map<String, String> hobbyBackgrounds = Map.of(
-                "운동", "in a dynamic sports field or gym background",
-                "독서", "in a cozy room with a bookshelf in the background",
-                "게임", "with colorful game-themed elements in the background",
-                "음악 감상", "in a room with soft lighting and music posters on the wall",
-                "영화 감상", "in a home theater or movie night setting",
-                "그림 그리기", "with an art studio or sketchbook-filled background",
-                "사진 촬영", "in a natural outdoor setting, like a park or street with scenic views"
+                "운동", "on a sports field or in a gym",
+                "독서", "in a cozy room with bookshelves",
+                "게임", "in a gaming room with colorful lights",
+                "음악 감상", "in a music-themed room",
+                "영화 감상", "in a home theater setup",
+                "그림 그리기", "in an art studio with sketches on the wall",
+                "사진 촬영", "in a scenic park or urban street"
         );
 
-        String visualHobby = hobbyVisualDescriptions.getOrDefault(hobby, "");
-        String characterPrompt = characterType.getPrompt();
+        String visualHobby = hobbyVisualDescriptions.getOrDefault(hobby, "engaging in " + hobby);
+        String background = hobbyBackgrounds.getOrDefault(hobby, "in a background that matches the activity");
 
-        // 프롬프트 시작
-        prompt.append("Create a profile image of a ")
-                .append(gender.getPrompt()).append(" with a ")
-                .append(mbti.getPrompt()).append(". ")
-                .append("The character enjoys ").append(hobby).append(". ");
+        // 4. 프롬프트 구성
+        prompt.append("Create a profile image of ");
 
-        if (!visualHobby.isBlank()) {
-            prompt.append("Visually show the character ").append(visualHobby).append(". ");
+        if (characterType == CharacterType.ANIMAL) {
+            prompt.append(characterDescription);
         } else {
-            prompt.append("Visually show the character doing something related to ").append(hobby).append(". ");
+            prompt.append("a ").append(gender.name().toLowerCase()).append(" character. ");
+            prompt.append(characterDescription);
         }
 
-        prompt.append(characterPrompt).append(" ");
+        prompt.append("The character is ")
+                .append(visualHobby).append(", ")
+                .append(background).append(". ");
 
-        // etc가 비어 있을 경우 hobby 기반 배경 추가
+        if (mbti != null) {
+            prompt.append("The character’s personality is ").append(mbti.getPrompt()).append(". ");
+        }
+
         if (etc != null && !etc.isBlank()) {
-            prompt.append("Additional details: ").append(etc).append(". ");
-        } else {
-            String background = hobbyBackgrounds.getOrDefault(
-                    hobby,
-                    "in a background that matches the character's mood and style"
-            );
-            prompt.append("Make the background ").append(background).append(". ");
+            prompt.append("Additional instructions: ").append(etc).append(". ");
         }
 
-        prompt.append("Make sure the character's personality and hobby are clearly expressed visually.");
+        prompt.append("Ensure that the character’s style and emotion align with the described hobby and personality.");
 
         return prompt.toString();
     }
-
 }
