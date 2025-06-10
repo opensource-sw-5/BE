@@ -30,30 +30,30 @@ Stable Diffusion 기반의 SNS 아바타 생성 웹 서비스의 "백엔드 레�
 │   │           │   │   │   AuthController.java
 │   │           │   │   │   UserController.java
 │   │           │   │   │   
+│   │           │   │   ├───dto
+│   │           │   │   │       AccessKeyRequest.java
+│   │           │   │   │       LoginRequest.java
+│   │           │   │   │       SignupRequest.java
+│   │           │   │   │       UserResponse.java
+│   │           │   │   │       
 │   │           │   │   └───swagger
 │   │           │   │           AuthControllerSpec.java
 │   │           │   │           UserControllerSpec.java
 │   │           │   │           
-│   │           │   ├───domain
-│   │           │   │   ├───entity
-│   │           │   │   │       AccessKey.java
-│   │           │   │   │       User.java
-│   │           │   │   │       
-│   │           │   │   ├───repository
-│   │           │   │   │       AccessKeyRepository.java
-│   │           │   │   │       UserRepository.java
-│   │           │   │   │       
-│   │           │   │   └───service
-│   │           │   │           AccessKeyService.java
-│   │           │   │           UserDetailService.java
-│   │           │   │           UserService.java
-│   │           │   │           
-│   │           │   └───dto
-│   │           │           AccessKeyRequest.java
-│   │           │           LoginRequest.java
-│   │           │           SignupRequest.java
-│   │           │           UserResponse.java
-│   │           │           
+│   │           │   └───domain
+│   │           │       ├───entity
+│   │           │       │       AccessKey.java
+│   │           │       │       User.java
+│   │           │       │       
+│   │           │       ├───repository
+│   │           │       │       AccessKeyRepository.java
+│   │           │       │       UserRepository.java
+│   │           │       │       
+│   │           │       └───service
+│   │           │               AccessKeyService.java
+│   │           │               UserDetailService.java
+│   │           │               UserService.java
+│   │           │               
 │   │           ├───common
 │   │           │   ├───annotation
 │   │           │   │       LoginUser.java
