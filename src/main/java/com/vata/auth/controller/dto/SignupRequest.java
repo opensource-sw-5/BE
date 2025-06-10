@@ -5,7 +5,7 @@
     2. 클라이언트가 전송한 요청 데이터를 편리하게 객체 형태로 받을 수 있도록 해줌 (signup 입장)
     3. 데이터 유효성 검사
  */
-package com.vata.auth.dto;
+package com.vata.auth.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,8 +1,8 @@
 package com.vata.auth.controller.swagger;
 
-import com.vata.auth.dto.AccessKeyRequest;
-import com.vata.auth.dto.LoginRequest;
-import com.vata.auth.dto.SignupRequest;
+import com.vata.auth.controller.dto.AccessKeyRequest;
+import com.vata.auth.controller.dto.LoginRequest;
+import com.vata.auth.controller.dto.SignupRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

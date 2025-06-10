@@ -1,4 +1,4 @@
-package com.vata.auth.dto;
+package com.vata.auth.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

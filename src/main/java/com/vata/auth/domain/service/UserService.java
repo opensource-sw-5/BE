@@ -2,7 +2,7 @@ package com.vata.auth.domain.service;
 
 import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.repository.UserRepository;
-import com.vata.auth.dto.SignupRequest;
+import com.vata.auth.controller.dto.SignupRequest;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
