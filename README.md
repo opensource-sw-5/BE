@@ -8,6 +8,7 @@ Stable Diffusion 기반의 SNS 아바타 생성 웹 서비스의 "백엔드 레�
 - Spring Security, Spring JPA, WebClient, RestTemplate
 - Swagger
 - MinIo, MySQL
+- Nginx, Docker, Dokcer Compose, Docker Registry, Github Actions
 
 ## 📂 프로젝트 주요 구조
 
