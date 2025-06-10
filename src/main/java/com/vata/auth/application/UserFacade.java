@@ -3,8 +3,8 @@ package com.vata.auth.application;
 import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.auth.domain.service.UserService;
-import com.vata.auth.dto.AccessKeyRequest;
-import com.vata.auth.dto.UserResponse;
+import com.vata.auth.controller.dto.AccessKeyRequest;
+import com.vata.auth.controller.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

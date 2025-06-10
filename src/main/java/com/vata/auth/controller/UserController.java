@@ -2,8 +2,8 @@ package com.vata.auth.controller;
 
 import com.vata.auth.application.UserFacade;
 import com.vata.auth.controller.swagger.UserControllerSpec;
-import com.vata.auth.dto.AccessKeyRequest;
-import com.vata.auth.dto.UserResponse;
+import com.vata.auth.controller.dto.AccessKeyRequest;
+import com.vata.auth.controller.dto.UserResponse;
 import com.vata.common.annotation.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

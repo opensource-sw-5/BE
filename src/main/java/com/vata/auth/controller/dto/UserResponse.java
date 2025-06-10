@@ -1,4 +1,4 @@
-package com.vata.auth.dto;
+package com.vata.auth.controller.dto;
 
 import com.vata.auth.domain.entity.User;
 

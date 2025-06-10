@@ -3,7 +3,7 @@ package com.vata.auth.application;
 import com.vata.auth.domain.entity.User;
 import com.vata.auth.domain.service.AccessKeyService;
 import com.vata.auth.domain.service.UserService;
-import com.vata.auth.dto.SignupRequest;
+import com.vata.auth.controller.dto.SignupRequest;
 import com.vata.profile.infrastructure.StabilityRestTemplate;
 import com.vata.profile.infrastructure.StabilityWebClient;
 import jakarta.servlet.http.HttpServletRequest;
